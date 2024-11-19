@@ -1,0 +1,255 @@
+/* Global Styles */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+
+.header {
+  background: #fff;
+  color: #fff;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+  display: flex;
+  margin-right: 10px;
+}
+
+.nav {
+  display: flex;
+  gap: 15px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #222;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav a:hover {
+  color: #7c4afa;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px; /* Space between search bar and login button */
+  margin-right: 30px; /* Adjust to control the leftward shift */
+}
+
+.user-actions input[type="text"] {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.user-actions .btn-login {
+  background-color: #7c4afa;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-actions .btn-login:hover {
+  background-color: #6439cc; /* Darker shade on hover */
+}
+
+
+/* Hero Section */
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  padding: 3rem 0;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: space-between; /* Ensure space between movie info and the poster */
+  align-items: center;
+}
+
+.movie-info h1 {
+  color: #fff;
+  font-size: 2.5rem;
+}
+
+.movie-info p {
+  margin: 10px 0;
+  color: #fff;
+}
+
+.btn-book {
+  background: #7c4afa;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-book:hover {
+  background: #6a3fdf;
+}
+
+.movie-poster {
+  flex: 1; /* Allow the image container to expand */
+  display: flex;
+  justify-content: flex-end; /* Align the image to the right */
+}
+
+.movie-poster img {
+  max-width: 100%;
+  height: auto;
+  margin-right: 20px; /* Add spacing between the image and the edge */
+}
+
+
+/* Quick Book Section */
+
+.quick-book {
+  background: #fff;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.quick-book h2 {
+  color: #7c4afa;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.filters select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filters .btn-book {
+  padding: 10px 20px;
+}
+
+
+/* Now Showing Section */
+
+.now-showing {
+  background: #222;
+  padding: 2rem 0;
+}
+
+.now-showing h3 {
+  color: #7c4afa;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.movie-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding: 1rem;
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.movie-details h4 {
+  color: #7c4afa;
+  margin: 10px 0;
+  font-size: 1.2rem;
+}
+
+.movie-details p {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.movie-card button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background: #7c4afa;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.movie-card button:hover {
+  background: #6a3fdf;
+}
+
+
+/* Footer Section */
+
+footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: 2rem;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .movie-poster {
+    order: -1;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+}
