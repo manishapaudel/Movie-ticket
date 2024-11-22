@@ -6,7 +6,7 @@
                 <select name="movie" class="dropdown">
                     <option>Select Movie</option>
                     <?php
-                    $movies = ['ABCD', 'Venom 2'];
+                    $movies = ['ABCD', 'Venom 2', 'Aladdin', 'Aquaman'];
                     foreach ($movies as $movie) {
                         echo "<option value='$movie'>$movie</option>";
                     }
@@ -15,7 +15,7 @@
                 <select name="date" class="dropdown">
                     <option>Select Date</option>
                     <?php
-                    $dates = ['12 Nov 2024', '13 Nov 2024'];
+                    $dates = ['12 Nov 2024', '13 Nov 2024', '14 Nov 2024', '15 Nov 2024'];
                     foreach ($dates as $date) {
                         echo "<option value='$date'>$date</option>";
                     }
@@ -24,7 +24,7 @@
                 <select name="cinema" class="dropdown">
                     <option>Select Cinema</option>
                     <?php
-                    $cinemas = ['QFX Cinema', 'Midtown Galleria Cinema'];
+                    $cinemas = ['QFX Cinema', 'Midtown Galleria Cinema', 'Phoenix Cinema'];
                     foreach ($cinemas as $cinema) {
                         echo "<option value='$cinema'>$cinema</option>";
                     }
@@ -33,7 +33,7 @@
                 <select name="time" class="dropdown">
                     <option>Select Timing</option>
                     <?php
-                    $timings = ['12:00 am', '4:00 pm'];
+                    $timings = ['8:00 am', '12:00 pm', '4:00 pm', '8:00 pm'];
                     foreach ($timings as $time) {
                         echo "<option value='$time'>$time</option>";
                     }

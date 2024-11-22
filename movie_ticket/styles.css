@@ -1,5 +1,4 @@
 /* Global Styles */
-
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -32,101 +31,125 @@ body {
   margin-right: 10px;
 }
 
-.nav {
-  display: flex;
-  gap: 15px;
-}
-
 .nav a {
   text-decoration: none;
-  color: #222;
-  font-size: 1rem;
-  transition: color 0.3s ease;
+  color: #333;
+  font-weight: 500;
 }
 
 .nav a:hover {
   color: #7c4afa;
 }
 
+
+/*user actions*/
+
 .user-actions {
   display: flex;
-  gap: 10px; /* Space between search bar and login button */
-  margin-right: 30px; /* Adjust to control the leftward shift */
+  align-items: center;
+  gap: 15px;
 }
 
-.user-actions input[type="text"] {
-  padding: 5px 10px;
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search input[type="text"] {
+  padding: 10px 15px 10px 35px; /* Adjust left padding for the icon */
+  font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 20px;
+  outline: none;
+  width: 200px;
 }
 
-.user-actions .btn-login {
-  background-color: #7c4afa;
-  color: white;
+.search i {
+  position: absolute;
+  left: 10px; /* Position icon on the left */
+  color: #666;
+  font-size: 18px;
+  pointer-events: none; /* Prevent icon from blocking input clicks */
+}
+
+.btn-login {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
   border: none;
-  padding: 5px 15px;
   border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
 }
 
-.user-actions .btn-login:hover {
-  background-color: #6439cc; /* Darker shade on hover */
+.btn-login:hover {
+  background-color: #0056b3;
 }
-
 
 /* Hero Section */
 
 .hero {
+  position: relative;
+  background-color: #222;
+  padding: 3rem 0;
+  overflow: hidden;
+}
+
+.slideshow-container {
+  position: relative;
+  max-width: 100%;
+  height: auto;
+}
+
+.hero-slide {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #222;
-  padding: 3rem 0;
+  padding: 40px;
+  text-align: center;                            
 }
 
-.hero-content {
-  display: flex;
-  justify-content: space-between; /* Ensure space between movie info and the poster */
-  align-items: center;
+.hero-slide .movie-info {
+  flex: 1;
+  text-align: center;                   
 }
 
-.movie-info h1 {
-  color: #fff;
-  font-size: 2.5rem;
-}
-
-.movie-info p {
-  margin: 10px 0;
+.hero-slide h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
   color: #fff;
 }
 
-.btn-book {
-  background: #7c4afa;
-  color: white;
+.hero-slide p {
+  line-height: 1.6;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.hero-slide .btn-book {
   padding: 10px 20px;
+  background-color: #7c4afa;
+  color: white;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.btn-book:hover {
-  background: #6a3fdf;
+.hero-slide .btn-book:hover {
+  background-color: #6a3fdf;
 }
 
-.movie-poster {
-  flex: 1; /* Allow the image container to expand */
-  display: flex;
-  justify-content: flex-end; /* Align the image to the right */
+.hero-slide .movie-poster {
+  flex: 0 0 auto;             /* Prevent the poster from stretching */
+  text-align: right;          
 }
 
-.movie-poster img {
+.hero-slide .movie-poster img {
   max-width: 100%;
   height: auto;
-  margin-right: 20px; /* Add spacing between the image and the edge */
+  border-radius: 10px;
 }
-
 
 /* Quick Book Section */
 
@@ -159,7 +182,6 @@ body {
 .filters .btn-book {
   padding: 10px 20px;
 }
-
 
 /* Now Showing Section */
 
@@ -222,7 +244,6 @@ body {
   background: #6a3fdf;
 }
 
-
 /* Footer Section */
 
 footer {
@@ -239,17 +260,24 @@ footer p {
 }
 
 /* Responsive Styles */
+
 @media (max-width: 768px) {
-  .hero {
+  .hero-slide {
     flex-direction: column;
     text-align: center;
   }
 
-  .movie-poster {
-    order: -1;
+  .hero-slide .movie-poster {
+    order: -1; /* Push the image to the bottom of the text */
+    text-align: center; /* Ensure the image is centered */
   }
 
-  .filters {
-    flex-direction: column;
+  .hero-slide .movie-info {
+    max-width: 100%;
+  }
+
+  .hero-slide .movie-poster img {
+    max-width: 200px;
+    margin: 0 auto;
   }
 }
