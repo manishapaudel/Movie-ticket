@@ -1,4 +1,5 @@
 /* Global Styles */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -25,20 +26,36 @@ body {
   align-items: center;
 }
 
+/* Logo Section */
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
 .logo img {
   height: 50px;
-  display: flex;
   margin-right: 10px;
+}
+
+/* Navigation Section */
+
+.nav {
+  display: flex; /* Make links appear in a row */
+  gap: 20px; /* Add space between each link */
 }
 
 .nav a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: color 0.3s ease;
 }
 
 .nav a:hover {
-  color: #7c4afa;
+  color: #7c4afa; /* Hover color */
 }
 
 
@@ -47,8 +64,10 @@ body {
 .user-actions {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px; /* Space between search and login button */
 }
+
+/* Search Section */
 
 .search {
   position: relative;
@@ -57,7 +76,7 @@ body {
 }
 
 .search input[type="text"] {
-  padding: 10px 15px 10px 35px; /* Adjust left padding for the icon */
+  padding: 10px 15px 10px 35px; /* Adjust left padding for icon */
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -73,18 +92,21 @@ body {
   pointer-events: none; /* Prevent icon from blocking input clicks */
 }
 
+/* Login Button */
+
 .btn-login {
   padding: 10px 20px;
   background-color: #007BFF;
-  color: #fff;
+  color: white;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .btn-login:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Hover color */
 }
 
 /* Hero Section */

@@ -24,6 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-Slide
     setInterval(() => {
       changeHeroSlide(1);
-    }, 1000); // 1 seconds
+    }, 8000); //
   });
   
