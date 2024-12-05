@@ -2,12 +2,12 @@
   <div class="logo">
     <img src="phoenix.png" alt="Phoenix Logo">
   </div>
-  <nav class="nav">
-      <a href="#">Home</a>
-      <a href="#">Showtimings</a>
-      <a href="#">Cinemas</a>
-      <a href="#">More</a>
-  </nav>
+  <div class="nav">
+      <a href="#">Home </a>
+      <a href="#">Showtimings </a>
+      <a href="#">Cinemas </a>
+      <a href="#">More </a>
+  </div>
 
   <div class="user-actions">
     <div class="search">
@@ -17,3 +17,6 @@
     <button class="btn-login">Login</button>
   </div>
 </header>
+
+
+
