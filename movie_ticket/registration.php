@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Create an account on our website to access exclusive features.">
-    <title>Registration Page</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
+<style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -65,9 +57,8 @@
         .login-container a:hover {
             text-decoration: underline;
         }
-    </style>
-</head>
-<body>
+</style>
+
     <div class="login-container">
         <h2>Register</h2>
         <?php
@@ -90,5 +81,4 @@
         </form>
         <p>Already have an account? <a href="Login.php">Login here</a></p>
     </div>
-</body>
-</html>
+

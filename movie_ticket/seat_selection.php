@@ -1,5 +1,5 @@
-    <style>
-        body {
+<style>
+    body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -8,11 +8,11 @@
             color: white; /* Make text white for better visibility */
         }
 
-        .seat-layout {
+    .seat-layout {
             width: 80%;
         }
 
-        .screen {
+    .screen {
             text-align: center;
             margin: 20px 0;
             font-size: 18px;
@@ -21,7 +21,7 @@
             position: relative;
         }
 
-        .screen::before {
+    .screen::before {
           content: "";
           display: block;
           width: 80%; /* Make the screen wider */
@@ -31,32 +31,32 @@
           margin: 0 auto; /* Center the screen */
         }
 
-        .section {
+    .section {
             margin: 30px 0;
         }
 
-        .section-title {
+    .section-title {
             text-align: left;
             font-weight: bold;
             margin-bottom: 10px;
             font-size: 16px;
         }
 
-        .seat-container {
+    .seat-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 15px;
         }
 
-        .seat-row {
+    .seat-row {
             display: flex;
             justify-content: center;
             gap: 5px;
             transform: perspective(300px) rotateX(5deg); /* Add depth to rows */
         }
 
-        .seat {
+    .seat {
             width: 25px;
             height: 25px;
             background-color: white; /* Change seat color to white */
@@ -67,71 +67,72 @@
             cursor: pointer;
         }
 
-        .seat:hover {
+    .seat:hover {
             background-color: lightgreen;
         }
 
-        .seat.occupied {
+    .seat.occupied {
             background-color: #ccc;
             cursor: not-allowed;
             color: blue;
         }
 
-        .seat.selected {
+    .seat.selected {
             background-color: yellow;
             color: black;
         }
 
-        .recliner {
+    .recliner {
             background-color: lightblue; /* Unique color for recliners */
             border-radius: 50%;
         }
 
-        .row-label {
+    .row-label {
             margin-right: 5px;
             font-weight: bold;
             color: white; /* Ensure row labels are visible */
         }
 
-        .legend {
+    .legend {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 20px;
         }
 
-        .legend-item {
+    .legend-item {
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        .legend-color {
+    .legend-color {
             border: 1px solid black;
         }
 
-        .legend-available {
+    .legend-available {
             background-color: lightgray;
         }
 
-        .legend-selected {
+    .legend-selected {
             background-color: yellow;
         }
 
-        .legend-occupied {
+    .legend-occupied {
             background-color: blue;
         }
 
-        .legend-recliner {
+    .legend-recliner {
             background-color: lightblue;
         }
-    </style>
+</style>
 
 
 <div class="seat-layout">
     <div class="screen">SCREEN</div>
 
     <!-- Classic Section -->
+
     <div class="section">
         <div class="section-title">CLASSIC (450.00)</div>
         <div class="seat-container">
@@ -150,6 +151,7 @@
     </div>
 
     <!-- Club Section -->
+
     <div class="section">
         <div class="section-title">CLUB (450.00)</div>
         <div class="seat-container">
@@ -169,6 +171,7 @@
     </div>
 
     <!-- Recliner Section -->
+
     <div class="section">
         <div class="section-title">RECLINER (750.00)</div>
         <div class="seat-container">
@@ -185,6 +188,7 @@
     </div>
 
     <!-- Legend -->
+     
     <div class="legend">
         <div class="legend-item">
             <div class="legend-color legend-available"></div> Available
@@ -258,3 +262,23 @@
         });
     });
 </script>
+
+<!-- <?php
+require 'config.php'; // Database connection
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $showtimeId = $_GET['showtime_id'];
+
+    $stmt = $conn->prepare("SELECT id, seat_number, status, price FROM seats WHERE showtime_id = ?");
+    $stmt->bind_param("i", $showtimeId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $seats = [];
+    while ($row = $result->fetch_assoc()) {
+        $seats[] = $row;
+    }
+
+    echo json_encode($seats);
+}
+?> -->

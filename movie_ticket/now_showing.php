@@ -1,3 +1,77 @@
+<style>
+    /* Now Showing Section */
+
+.now-showing {
+  background: #222;
+  padding: 2rem 0;
+}
+
+.now-showing h3 {
+  color: #7c4afa;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  justify-items: center;
+}
+
+.movie-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.movie-card img {
+  width: 100%;           /* Ensures the image takes the full width of the card */
+  height: 300px;         /* Fixed height to enforce uniform size */
+  object-fit: cover;     /* Crops and centers the image within the given dimensions */
+  border-radius: 10px;   /* Keeps the rounded corner style */
+}
+
+.movie-details {
+  margin-top: 1rem;
+}
+
+.movie-details h4 {
+  color: #333;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.movie-details p {
+  color: #555;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 1rem 0; /* Ensure space between details and button */
+}
+
+.movie-card button.btn-book {
+  margin: 0 auto; /* Center-align button */
+  padding: 10px 20px;
+  background: #7c4afa;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.movie-card button.btn-book:hover {
+  background: #6a3fdf;
+}
+</style>
+
 <?php
 // Array to simulate movie data
 $now_showing = [
@@ -27,16 +101,6 @@ $now_showing = [
     ]
 ];
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Now Showing</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
 
 <section class="now-showing">
     <div class="container">
