@@ -49,9 +49,13 @@ body {
   text-decoration: none;
   color: #333;
   font-weight: 500;
+<<<<<<< HEAD
+  margin:20px;
+=======
   font-size: 18px;
   padding: 5px 10px;
   transition: color 0.3s ease;
+>>>>>>> f4181a419738139fc95d3e0391f2edf4c804ca39
 }
 
 .nav a:hover {
