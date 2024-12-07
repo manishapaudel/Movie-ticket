@@ -1,84 +1,147 @@
-<style>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    include 'config.php';
+
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $retype_password = $_POST['retype_password'];
+
+    // Validate inputs
+    if ($password !== $retype_password) {
+        $message = "<div class='error'>Passwords do not match!</div>";
+    } else {
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+        try {
+            $stmt = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
+            $stmt->execute([$email, $hashed_password]);
+            $message = "<div class='success'>Registration successful! <a href='Login.php'>Login here</a></div>";
+        } catch (PDOException $e) {
+            if ($e->errorInfo[1] == 1062) { // Duplicate entry
+                $message = "<div class='error'>Email is already registered!</div>";
+            } else {
+                $message = "<div class='error'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</div>";
+            }
+        }
+    }
+}
+?>
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-        }
-
-        .login-container {
-            border: 3px solid #ccc;
-            background: #fff;
-            padding: 20px;
-            width: 90%;
-            max-width: 400px;
-            margin: 5% auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .login-container h2 {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f9f9f9;
             color: #333;
         }
-
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: block;
-            background-color: #f9f9f9;
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
-
-        .login-container input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #007BFF;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            text-align: left;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+        }
+        button {
+            width: 100%;
+            padding: 0.7rem;
+            font-size: 1rem;
+            background: #007BFF;
+            color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: block;
-            width: 100%;
+            transition: background 0.3s;
         }
-
-        .login-container p {
-            text-align: center;
+        button:hover {
+            background: #0056b3;
         }
-
-        .login-container a {
-            font-weight: bold;
-            color: #4CAF50;
+        a {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #007BFF;
             text-decoration: none;
         }
-
-        .login-container a:hover {
+        a:hover {
             text-decoration: underline;
         }
-</style>
-
-    <div class="login-container">
-        <h2>Register</h2>
-        <?php
-        if (isset($_GET['error'])) {
-            if ($_GET['error'] === 'username_taken') {
-                echo "<p style='color: red; text-align: center;'>Username is already taken. Please choose another.</p>";
-            }
+        .error, .success {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
         }
-        ?>
-        <form action="register_process.php" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Password must contain at least one number, one uppercase and lowercase letter, and at least 8 characters.">
-            <br><br>
-            <input type="submit" value="Register">
+        .error {
+            color: #ff0000;
+            background: #ffe6e6;
+        }
+        .success {
+            color: #28a745;
+            background: #e6ffed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        <?php if (isset($message)) echo $message; ?>
+        <form method="POST" action="">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            
+            <label for="retype_password">Retype Password</label>
+            <input type="password" id="retype_password" name="retype_password" required>
+            
+            <button type="submit">Register</button>
         </form>
-        <p>Already have an account? <a href="Login.php">Login here</a></p>
+        <a href="Login.php">Already have an account? Login here</a>
     </div>
-
+</body>
+</html>

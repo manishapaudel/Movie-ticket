@@ -1,104 +1,120 @@
+<?php
+session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    include 'config.php';
+
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['email'] = $user['email'];
+        
+        echo "<div style='font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;'>
+                <div style='background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;'>
+                    <div style='font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;'>
+                        Login successful! Welcome, " . htmlspecialchars($user['email']) . ".
+                    </div>
+                    <a href='index.php' style='display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;'>Go to Dashboard</a>
+                </div>
+            </div>";
+        
+        
+    } else {
+        echo "<div class='error'>Invalid email or password!</div>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Login to access your account on My Website.">
     <title>Login</title>
     <style>
+        /* Minimalist CSS */
         body {
             font-family: Arial, sans-serif;
-            background-color: #000; /* Fallback for background image */
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        .login-container {
-            border: 3px solid #ccc;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(loginbackground.jpg);
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            margin: 5% auto;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .login-container h2 {
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
             text-align: center;
-            color: #fff;
         }
-
-        .login-container form {
-            text-align: center;
-            color: #fff;
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
-
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.2); /* Slightly more opaque for better contrast */
-            color: #fff;
-        }
-
-        .login-container input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .login-container p {
-            text-align: center;
-            color: #fff;
-        }
-
-        .login-container a {
-            color: #4CAF50;
-            text-decoration: none;
+        label {
+            display: block;
+            margin: 0.5rem 0 0.2rem;
             font-weight: bold;
         }
-
-        .login-container a:hover {
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 0.7rem;
+            background: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .link {
+            margin-top: 1rem;
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .link:hover {
             text-decoration: underline;
         }
-
-        @media (max-width: 768px) {
-            .login-container {
-                width: 95%;
-                padding: 20px;
-            }
+        .error {
+            color: #FF0000;
+            margin-bottom: 1rem;
+        }
+        .success {
+            color: #28a745;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <?php
-        if (isset($_GET['error']) && $_GET['error'] === 'invalid_credentials') {
-            echo "<p style='color: red; text-align: center;'>Invalid username or password. Please try again.</p>";
-        } elseif (isset($_GET['error']) && $_GET['error'] === 'empty_fields') {
-            echo "<p style='color: red; text-align: center;'>Please fill in all required fields.</p>";
-        }
-        ?>
-        <form action="loginprocess.php" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br><br>
+    <div class="container">
+        <h1>Login</h1>
+        <form method="POST" action="login.php">
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-            <input type="submit" value="Login">
+            <input type="password" name="password" required>
+            <button type="submit" class="btn">Login</button>
         </form>
-        <p>Don't have an account? <a href="registration.php">Register here</a></p>
+        <a href="registration.php" class="link">Don't have an account? Register here</a>
     </div>
 </body>
 </html>

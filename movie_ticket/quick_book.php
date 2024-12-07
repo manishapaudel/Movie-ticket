@@ -39,7 +39,7 @@
                     }
                     ?>
                 </select>
-                <button type="submit" class="btn-book">Book</button>
+                <button type="submit" class="btn-book"><a href="seat_selection.php">Book</a></button>
             </form>
         </div>
     </div>

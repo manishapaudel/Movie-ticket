@@ -1,130 +1,180 @@
 <style>
-    body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            margin: 20px;
-            background-color: #8b00ff; /* Change background to black */
-            color: white; /* Make text white for better visibility */
-        }
+    /* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1c1c1c; /* Dark background for a minimalist feel */
+    color: #f1f1f1; /* Light text for contrast */
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    height: 100vh;
+    align-items: center;
+}
 
+/* Seat Layout Container */
+.seat-layout {
+    width: 85%;
+    max-width: 1200px;
+    background-color: #2c2c2c; /* Dark gray background for seats container */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for a modern touch */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Screen Section */
+.screen {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.screen::before {
+    content: "";
+    display: block;
+    width: 90%;
+    height: 15px;
+    background-color: #444444;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+/* Seat Sections (Classic, Club, Recliner) */
+.section {
+    margin: 40px 0;
+}
+
+.section-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.seat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Seat Row Styling */
+.seat-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    background-color: #444444;
+    border: 1px solid #777777;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
+}
+
+.seat:hover {
+    background-color: #00b894; /* Subtle green on hover */
+    transform: scale(1.1); /* Slightly enlarge seat on hover */
+}
+
+.seat.selected {
+    background-color: #fdcb6e; /* Yellow for selected seat */
+    color: #2d3436; /* Dark text for contrast */
+}
+
+.seat.occupied {
+    background-color: #636e72;
+    color: #dfe6e9;
+    cursor: not-allowed;
+}
+
+.seat.recliner {
+    background-color: #74b9ff;
+    border-radius: 50%;
+}
+
+.row-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #dfe6e9;
+    margin-right: 10px;
+}
+
+/* Seat Legend */
+.legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.legend-available {
+    background-color: #444444;
+}
+
+.legend-selected {
+    background-color: #fdcb6e;
+}
+
+.legend-occupied {
+    background-color: #636e72;
+}
+
+.legend-recliner {
+    background-color: #74b9ff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
     .seat-layout {
-            width: 80%;
-        }
-
-    .screen {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-            color: white; /* Ensure screen label is visible */
-            position: relative;
-        }
-
-    .screen::before {
-          content: "";
-          display: block;
-          width: 80%; /* Make the screen wider */
-          height: 20px; /* Increase height for a more prominent screen */
-          background: black; /* Screen is now black */
-          border-radius: 50px; /* Add curvature to the screen */
-          margin: 0 auto; /* Center the screen */
-        }
-
-    .section {
-            margin: 30px 0;
-        }
-
-    .section-title {
-            text-align: left;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-    .seat-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
+        width: 95%;
+        padding: 10px;
+    }
 
     .seat-row {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            transform: perspective(300px) rotateX(5deg); /* Add depth to rows */
-        }
+        gap: 8px;
+    }
 
     .seat {
-            width: 25px;
-            height: 25px;
-            background-color: white; /* Change seat color to white */
-            color: black; /* Make seat text black for contrast */
-            border: 1px solid white; /* Update border to white */
-            text-align: center;
-            line-height: 25px;
-            cursor: pointer;
-        }
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
 
-    .seat:hover {
-            background-color: lightgreen;
-        }
-
-    .seat.occupied {
-            background-color: #ccc;
-            cursor: not-allowed;
-            color: blue;
-        }
-
-    .seat.selected {
-            background-color: yellow;
-            color: black;
-        }
-
-    .recliner {
-            background-color: lightblue; /* Unique color for recliners */
-            border-radius: 50%;
-        }
-
-    .row-label {
-            margin-right: 5px;
-            font-weight: bold;
-            color: white; /* Ensure row labels are visible */
-        }
+    .section-title {
+        font-size: 16px;
+    }
 
     .legend {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
+        font-size: 12px;
+    }
+}
 
-    .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-    .legend-color {
-            border: 1px solid black;
-        }
-
-    .legend-available {
-            background-color: lightgray;
-        }
-
-    .legend-selected {
-            background-color: yellow;
-        }
-
-    .legend-occupied {
-            background-color: blue;
-        }
-
-    .legend-recliner {
-            background-color: lightblue;
-        }
 </style>
 
 
@@ -132,7 +182,6 @@
     <div class="screen">SCREEN</div>
 
     <!-- Classic Section -->
-
     <div class="section">
         <div class="section-title">CLASSIC (450.00)</div>
         <div class="seat-container">
@@ -151,7 +200,6 @@
     </div>
 
     <!-- Club Section -->
-
     <div class="section">
         <div class="section-title">CLUB (450.00)</div>
         <div class="seat-container">
@@ -171,7 +219,6 @@
     </div>
 
     <!-- Recliner Section -->
-
     <div class="section">
         <div class="section-title">RECLINER (750.00)</div>
         <div class="seat-container">
@@ -188,7 +235,6 @@
     </div>
 
     <!-- Legend -->
-     
     <div class="legend">
         <div class="legend-item">
             <div class="legend-color legend-available"></div> Available
@@ -204,8 +250,6 @@
         </div>
     </div>
 </div>
-</body>
-</html>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
