@@ -216,10 +216,10 @@ body {
     <div class="dropdown">
       <a href="#">More</a>
       <div class="dropdown-content">
-        <a href="#">Contact</a>
-        <a href="#">About Us</a>
-        <a href="#">FAQ</a>
-        <a href="#">Terms & Conditions</a>
+        <a href="contact.html">Contact</a>
+        <a href="about-us.html">About Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms & Conditions</a>
       </div>
     </div>
   </div>
