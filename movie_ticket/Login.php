@@ -22,7 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href='index.php' style='display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;'>Go to Dashboard</a>
                 </div>
             </div>";
+<<<<<<< HEAD
              
+=======
+        
+        
+>>>>>>> ea0313745a3790d74d2ccf52bacf100b03b0f20c
     } else {
         echo "<div class='error'>Invalid email or password!</div>";
     }
