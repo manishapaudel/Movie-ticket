@@ -229,6 +229,6 @@ body {
       <i class="bi bi-search"></i>
       <input type="text" placeholder="Search...">
     </div>
-    <div><button class="btn-login"><a href="login.php">Login</a></button></div>
+    <div><button class="btn-login"><a href="Login.php">Login</a></button></div>
   </div>
 </header>

@@ -7,32 +7,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['email'] = $user['email'];
-        
-        echo "<div style='font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;'>
-                <div style='background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;'>
-                    <div style='font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;'>
-                        Login successful! Welcome, " . htmlspecialchars($user['email']) . ".
-                    </div>
-                    <a href='index.php' style='display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;'>Go to Dashboard</a>
+        ?>
+        <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;">
+            <div style="background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;">
+                <div style="font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
+                    Login successful! Welcome, <?= htmlspecialchars($user['email']); ?>.
                 </div>
-            </div>";
-<<<<<<< HEAD
-             
-=======
-        
-        
->>>>>>> ea0313745a3790d74d2ccf52bacf100b03b0f20c
+                <a href="index.php" style="display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;">Go to Dashboard</a>
+            </div>
+        </div>
+        <?php
     } else {
         echo "<div class='error'>Invalid email or password!</div>";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
