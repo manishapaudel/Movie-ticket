@@ -30,7 +30,7 @@
           Cletus Kasady, who is on death row. <br>
           When Carnage gains control over Cletus's body, he escapes from the prison.
         </p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book"><a href="seat_selection.php">Book</a></button>
       </div>
       <div class="movie-poster">
         <img src="Img/venom2.webp" alt="Venom - Let There Be Carnage">
@@ -47,7 +47,7 @@
         Arthur Curry, the human-born heir to the underwater kingdom of Atlantis, goes on a quest <br>
         to prevent a war between the worlds of ocean and land.
         </p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book"><a href="seat_selection.php">Book</a></button>
       </div>
       <div class="movie-poster">
         <img src="Img/aquaman.jpg" alt="Aquaman">
@@ -62,7 +62,7 @@
         <p>
         When a capable dancer is provoked by the evil design of his employer, naturally he will be out to prove his mettle.
         </p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book"><a href="seat_selection.php">Book</a></button>
       </div>
       <div class="movie-poster">
         <img src="Img/abcd.jpg" alt="ABCD">
@@ -79,7 +79,7 @@
          While visiting her palace, Aladdin stumbles upon a magic oil lamp that unleashes a powerful,
           wisecracking, larger-than-life genie.
         </p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book"><a href="seat_selection.php">Book</a></button>
       </div>
       <div class="movie-poster">
         <img src="Img/aladdin.jpg" alt="Aladdin">
