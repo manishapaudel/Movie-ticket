@@ -213,7 +213,7 @@ body {
     </div>
 
     <!-- More Section with Dropdown -->
-    <div class="dropdown">
+    <!<div class="dropdown">
       <a href="#">More</a>
       <div class="dropdown-content">
         <a href="contact.html">Contact</a>
