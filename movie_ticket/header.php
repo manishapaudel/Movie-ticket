@@ -1,5 +1,5 @@
 <style>
-  /* General Reset */
+ /* General Reset */
 /* General Reset */
 * {
   margin: 0;
@@ -9,52 +9,50 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f8f9fa;
+  background-color: #f9f9f9;
   color: #333;
 }
 
 /* Header Section */
 .header {
   background: #ffffff;
-  padding: 10px 2rem;
+  padding: 15px 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
 .logo img {
-  height: 50px;
+  height: 40px;
   width: auto;
 }
 
+/* Navigation Menu */
 .nav {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 25px;
 }
 
 .nav a {
   text-decoration: none;
   color: #333;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  padding: 10px 15px;
+  padding: 8px 12px;
   transition: all 0.3s ease;
-  position: relative;
 }
 
 .nav a:hover {
   color: #007BFF;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.1);
+  border-bottom: 2px solid #007BFF;
 }
 
-/* Dropdown Menu Styling */
+/* Dropdown Menu */
 .dropdown {
   position: relative;
 }
@@ -66,19 +64,19 @@ body {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #ffffff;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  min-width: 180px;
-  border-radius: 5px;
-  padding: 10px 0;
-  z-index: 1;
-  transition: opacity 0.3s ease-in-out;
-  opacity: 0;
+  top: 120%;
+  left: 0;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 10;
 }
 
 .dropdown-content a {
   color: #333;
-  padding: 12px 20px;
+  padding: 10px 15px;
   text-decoration: none;
   font-size: 0.9rem;
   display: block;
@@ -86,21 +84,10 @@ body {
 }
 
 .dropdown-content a:hover {
-  background-color: #f1f1f1;
-  color: #007BFF;
+  background-color: #f8f9fa;
 }
 
-.dropdown:hover .dropdown-content {
-  opacity: 1;
-}
-
-/* Search and Login Section */
-.user-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;  /* Space between search and login button */
-}
-
+/* Search Bar */
 .search {
   position: relative;
   display: flex;
@@ -108,12 +95,12 @@ body {
 }
 
 .search input[type="text"] {
-  padding: 10px 15px 10px 40px;
-  font-size: 16px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
   border: 1px solid #ccc;
-  border-radius: 30px;
+  border-radius: 20px;
   outline: none;
-  width: 220px;
+  width: 200px;
   transition: border-color 0.3s ease;
 }
 
@@ -123,9 +110,9 @@ body {
 
 .search i {
   position: absolute;
-  left: 12px;
+  left: 10px;
   color: #999;
-  font-size: 18px;
+  font-size: 16px;
   pointer-events: none;
 }
 
@@ -133,11 +120,11 @@ body {
 .user-actions .btn-login {
   background: #007BFF;
   color: white;
-  padding: 12px 25px;
+  padding: 8px 20px;
   border: none;
-  border-radius: 30px;
+  border-radius: 20px;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-size: 1rem;
   transition: background-color 0.3s;
 }
 
@@ -153,41 +140,36 @@ body {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .header {
+    flex-direction: column;
+    align-items: flex-start;
     padding: 10px 1rem;
   }
 
   .nav {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     align-items: flex-start;
-  }
-
-  .nav a {
-    padding: 8px 10px;
   }
 
   .dropdown-content {
     position: static;
     box-shadow: none;
-    padding: 5px;
+    border: none;
     width: 100%;
-    opacity: 1;
     display: block;
   }
 
-  .dropdown-content a {
-    padding: 8px 15px;
-  }
-
   .search input[type="text"] {
-    width: 180px;
+    width: 100%;
   }
 
   .user-actions {
     flex-direction: column;
-    gap: 10px;  /* Stack search and login on small screens */
+    gap: 10px;
   }
 }
+
+
 
 
 </style>
@@ -228,7 +210,7 @@ body {
     <div class="search">
       <i class="bi bi-search"></i>
       <input type="text" placeholder="Search...">
-    </div>
+    
     <div><button class="btn-login"><a href="Login.php">Login</a></button></div>
-  </div>
+ 
 </header>

@@ -6,30 +6,142 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
+    try {
+        // Prepare the statement with placeholders
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        // Bind the parameter
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        // Execute the statement
+        $stmt->execute();
+        // Fetch the user data
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['email'] = $user['email'];
-        ?>
-        <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;">
-            <div style="background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;">
-                <div style="font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
-                    Login successful! Welcome, <?= htmlspecialchars($user['email']); ?>.
-                </div>
-                <a href="index.php" style="display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;">Go to Dashboard</a>
-            </div>
-        </div>
-        <?php
-    } else {
-        echo "<div class='error'>Invalid email or password!</div>";
+        // Verify password
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            ?>
+            <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;">
+                <div style="background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;">
+                    <div style="font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
+                        Login successful! Welcome, <?= htmlspecialchars($user['email']); ?>.
+                    </div>
+                    <a href="index.php" style="display: inline-bloc<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    include 'config.php';
+
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $error_message = '';
+
+    try {
+        // Prepare the statement
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verify the password
+        if ($user && password_verify($password, $user['password'])) {
+            session_regenerate_id(true); // Secure the session
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+
+            // Redirect to the dashboard
+            header('Location: index.php');
+            exit;
+        } else {
+            $error_message = "Invalid email or password!";
+        }
+    } catch (PDOException $e) {
+        // Log the actual error and show a generic message
+        error_log($e->getMessage());
+        $error_message = "An unexpected error occurred. Please try again.";
     }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .error {
+            color: #FF0000;
+            margin-bottom: 1rem;
+        }
+        input, button {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+        }
+        .link {
+            display: block;
+            margin-top: 1rem;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <?php if (!empty($error_message)): ?>
+            <div class="error"><?= htmlspecialchars($error_message); ?></div>
+        <?php endif; ?>
+        <form method="POST" action="">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <a href="registration.php" class="link">Don't have an account? Register here</a>
+    </div>
+</body>
+</html>
+k; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;">Go to Dashboard</a>
+                </div>
+            </div>
+            <?php
+        } else {
+            echo "<div class='error'>Invalid email or password!</div>";
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+?>
+
 
 
 <!DOCTYPE html>
