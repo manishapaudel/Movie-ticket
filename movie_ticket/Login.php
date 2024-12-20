@@ -1,45 +1,46 @@
 <?php
 session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Include the database configuration
     include 'config.php';
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
     try {
-        // Prepare the statement with placeholders
+        // Check if email and password are provided
+        if (!isset($_POST['email']) || empty(trim($_POST['email'])) || 
+            !isset($_POST['password']) || empty(trim($_POST['password']))) {
+            throw new Exception("Email and password are required.");
+        }
+
+        // Sanitize and validate the input
+        $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+        $password = trim($_POST['password']);
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception("Invalid email format.");
+        }
+
+        // Prepare the SQL statement to prevent SQL injection
         $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-        // Bind the parameter
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        // Execute the statement
         $stmt->execute();
-        // Fetch the user data
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Verify password
+        // Check if the user exists and the password matches
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
-            ?>
-            <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;">
-                <div style="background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;">
-                    <div style="font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
-                        Login successful! Welcome, <?= htmlspecialchars($user['email']); ?>.
-                    </div>
-                    <a href="index.php" style="display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;">Go to Dashboard</a>
-                </div>
-            </div>
-            <?php
+            $successMessage = "Login successful! Welcome, " . htmlspecialchars($user['email']);
         } else {
-            echo "<div class='error'>Invalid email or password!</div>";
+            $errorMessage = "Invalid email or password.";
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $errorMessage = "Database error: " . $e->getMessage();
+    } catch (Exception $e) {
+        $errorMessage = $e->getMessage();
     }
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        /* Minimalist CSS */
         body {
             font-family: Arial, sans-serif;
             background: #f5f5f5;
@@ -118,16 +118,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h1>Login</h1>
-        <form method="POST" action="login.php">
-            <label for="email">Email:</label>
-            <input type="email" name="email" required>
-            <label for="password">Password:</label>
-            <input type="password" name="password" required>
-            <button type="submit" class="btn">Login</button>
-        </form>
-        <a href="registration.php" class="link">Don't have an account? Register here</a><br>
-        <a href="admin_login.php" class="link">Login as Admin</a>
-
+        <?php if (isset($successMessage)): ?>
+            <div class="success"><?= htmlspecialchars($successMessage) ?></div>
+            <a href="index.php" class="btn">Go to Dashboard</a>
+        <?php else: ?>
+            <?php if (isset($errorMessage)): ?>
+                <div class="error"><?= htmlspecialchars($errorMessage) ?></div>
+            <?php endif; ?>
+            <form method="POST" action="">
+                <label for="email">Email:</label>
+                <input type="email" name="email" placeholder="Enter Email" required>
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Enter Password" required>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <a href="registration.php" class="link">Don't have an account? Register here</a><br>
+            <a href="admin_login.php" class="link">Login as Admin</a>
+        <?php endif; ?>
     </div>
 </body>
 </html>
