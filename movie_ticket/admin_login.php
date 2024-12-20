@@ -8,17 +8,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     // Query the database to check credentials
-    $stmt = $conn->prepare("SELECT * FROM admins WHERE email = ? AND password = MD5(?)");
-    $stmt->execute([$email, $password]);
+    $stmt = $conn->prepare("SELECT * FROM admins WHERE email = ?");
+    $stmt->execute([$email]);
     $admin = $stmt->fetch();
 
     if ($admin) {
-        // Set session and redirect to admin dashboard
-        $_SESSION['admin_id'] = $admin['id'];
-        header("Location: admin_dashboard.php");
-        exit;
+        if( password_verify( $password ,$admin["password"])){
+
+            // Set session and redirect to admin dashboard
+            $_SESSION['admin_id'] = $admin['id'];
+            header("Location: admin_dashboard.php");
+            exit;
+        }else{
+
+            $error = 'Password not match.';
+        }
     } else {
-        $error = 'Invalid email or password.';
+        $error = 'No email address found.';
     }
 }
 ?>

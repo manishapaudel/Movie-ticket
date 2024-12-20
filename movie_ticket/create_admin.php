@@ -1,12 +1,18 @@
 <?php
 include 'config.php';
 
+// Admin details
 $email = 'admin@example.com';
-$password = 'admin123';
-$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$password = password_hash('admin123', PASSWORD_DEFAULT); // Securely hash the password
 
-$stmt = $conn->prepare("INSERT INTO admins (email, password) VALUES (?, ?)");
-$stmt->execute([$email, $hashedPassword]);
+// Insert the admin record
+$stmt = $conn->prepare("INSERT INTO admins (email, password) VALUES (:email, :password)");
+$stmt->bindParam(':email', $email);
+$stmt->bindParam(':password', $password);
 
-echo "Admin created successfully!";
+if ($stmt->execute()) {
+    echo "Admin created successfully.";
+} else {
+    echo "Error creating admin.";
+}
 ?>
