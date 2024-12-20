@@ -110,6 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">Login</button>
         </form>
+        <div style="text-align: center; margin-top: 10px;">
+            <a href="index.php" style="color: #007bff; text-decoration: none;">← Back to Home</a>
+        </div>
     </div>
 </body>
 </html>
