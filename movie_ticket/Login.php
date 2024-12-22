@@ -49,69 +49,160 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            color: #333;
         }
+
         .container {
-            background: #fff;
+            background: #ffffff;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
+            animation: fadeIn 1s ease-in-out;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         h1 {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            color: #333;
             margin-bottom: 1rem;
         }
+
         label {
             display: block;
             margin: 0.5rem 0 0.2rem;
             font-weight: bold;
+            color: #666;
         }
+
         input {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.8rem;
             margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
         }
+
+        input:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 5px rgba(37, 117, 252, 0.5);
+        }
+
         .btn {
             display: inline-block;
             width: 100%;
-            padding: 0.7rem;
-            background: #007BFF;
-            color: #fff;
+            padding: 0.8rem;
+            background: #2575fc;
+            color: #ffffff;
             text-decoration: none;
             text-align: center;
-            border-radius: 4px;
-            margin-top: 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
         }
+
         .btn:hover {
-            background: #0056b3;
+            background: #1a5bbf;
         }
-        .link {
+
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 1rem;
-            display: block;
-            color: #007BFF;
-            text-decoration: none;
+            gap: 0.5rem;
         }
+
+        .link {
+            color: #2575fc;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
         .link:hover {
             text-decoration: underline;
         }
+
         .error {
-            color: #FF0000;
+            color: #ff4d4d;
             margin-bottom: 1rem;
         }
+
         .success {
             color: #28a745;
             margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(blue, pink);
+                color: #f5f5f5;
+            }
+
+            .container {
+                background: #252525;
+                color: #f5f5f5;
+            }
+
+            input {
+                background: #333;
+                border: 1px solid #444;
+                color: #f5f5f5;
+            }
+
+            input:focus {
+                border-color: #2575fc;
+                box-shadow: 0 0 5px rgba(37, 117, 252, 0.8);
+            }
+
+            .btn {
+                background: #2575fc;
+                color: #ffffff;
+            }
+
+            .link {
+                color: #2575fc;
+            }
         }
     </style>
 </head>
@@ -132,8 +223,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" name="password" placeholder="Enter Password" required>
                 <button type="submit" class="btn">Login</button>
             </form>
-            <a href="registration.php" class="link">Don't have an account? Register here</a><br>
-            <a href="admin_login.php" class="link">Login as Admin</a>
+            <div class="link-container">
+                <a href="registration.php" class="link">Don't have an account? Register here</a>
+                <a href="admin_login.php" class="link">Login as Admin</a>
+                <a href="index.php" style="color: #007bff; justify-content: center; text-decoration: none;">← Back to Home</a>
+            </div>
         <?php endif; ?>
     </div>
 </body>
