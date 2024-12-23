@@ -36,12 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: linear-gradient(pink, pink, blue, blue);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .login-container {
@@ -55,6 +63,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flex-direction: column;
             align-items: center;
             gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
@@ -90,19 +108,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
-            background: #333;
-            color: #f5f5f5;
+            background: #fff;
+            color: #333;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
         }
 
-        input[type="email"]::placeholder,
-        input[type="password"]::placeholder {
-            color: #aaa;
-        }
-
-        input:focus {
+        input[type="email"]:focus,
+        input[type="password"]:focus {
             border-color: #2575fc;
             outline: none;
-            box-shadow: 0 0 5px rgba(37, 117, 252, 0.8);
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.8);
+            transform: scale(1.03);
         }
 
         button {
@@ -114,12 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #fff;
             font-weight: bold;
             font-size: 1rem;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s ease;
             cursor: pointer;
         }
 
         button:hover {
             background-color: #1a5bbf;
+            transform: scale(1.05);
         }
 
         .error {
@@ -127,6 +144,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 0.9rem;
             text-align: center;
             margin-bottom: 1rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .link {
@@ -146,38 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             h1 {
                 font-size: 1.8rem;
-            }
-        }
-
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(blue, pink);
-                color: #f5f5f5;
-            }
-
-            .login-container {
-                background: #252525;
-                color: #f5f5f5;
-            }
-
-            input {
-                background: #333;
-                border: 1px solid #444;
-                color: #f5f5f5;
-            }
-
-            input:focus {
-                border-color: #2575fc;
-                box-shadow: 0 0 5px rgba(37, 117, 252, 0.8);
-            }
-
-            button {
-                background: #2575fc;
-                color: #ffffff;
-            }
-
-            .link {
-                color: #2575fc;
             }
         }
     </style>

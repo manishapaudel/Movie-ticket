@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         h1 {
             font-size: 2rem;
-            color: #333;
+            color: #fff;
             margin-bottom: 1rem;
         }
 
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: block;
             margin: 0.5rem 0 0.2rem;
             font-weight: bold;
-            color: #666;
+            color: #fff;
         }
 
         input {
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             padding: 0.8rem;
             background: #2575fc;
-            color: #ffffff;
+            color: #fff;
             text-decoration: none;
             text-align: center;
             border-radius: 5px;
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             input {
-                background: #333;
+                background: #fff;
                 border: 1px solid #444;
                 color: #f5f5f5;
             }

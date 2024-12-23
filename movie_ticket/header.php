@@ -1,190 +1,225 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phoenix Cinemas - Movie Booking</title>
-  <style>
-    /* Global Styles */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(pink, blue, blue);
-      color: #ffffff;
-    }
+<style>
+ /* General Reset */
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    /* Header */
-    header {
-      background: #000;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      color: #fff;
-      font-size: 20px;
-      margin: 0;
-    }
-    header nav a {
-      color: #ddd;
-      margin-left: 15px;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    header nav a:hover {
-      color: #6a0dad;
-    }
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
 
-    /* Section Headers */
-    .section-header {
-      text-align: center;
-      margin: 20px 0;
-      font-size: 50px;
-      font-weight: bold;
-      color: #111;
-    }
+/* Header Section */
+.header {
+  background: #ffffff;
+  padding: 10px 1rem; /* Reduce padding for smaller header height */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.logo img {
+  height: 40px;
+  width: auto;
+}
 
-    /* Hero Section */
-    .hero-section {
-      position: relative;
-      height: 70vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+/* Navigation Menu */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
 
-    .hero-carousel {
-      display: flex;
-      flex-wrap: nowrap;
-      transition: transform 0.5s ease-in-out;
-      width: 100%; /* Full width for smoother animation */
-    }
+.nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
 
-    .hero-slide {
-      flex: 0 0 100%; /* Each slide takes 100% width of the container */
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between; /* Space between image and text */
-      padding: 20px;
-      box-sizing: border-box;
-    }
+.nav a:hover {
+  color: #007BFF;
+  border-bottom: 2px solid #007BFF;
+}
 
-    .hero-slide img {
-      max-width: 30%; /* Restrict image width */
-      height: auto; /* Maintain aspect ratio */
-      border-radius: 10px;
-      object-fit: cover;
-    }
+/* Dropdown Menu */
+.dropdown {
+  position: relative;
+}
 
-    .movie-info {
-      flex: 0 0 65%;
-      text-align: left;
-    }
-    .movie-info h1 {
-      font-size: 22px;
-      margin-bottom: 10px;
-      color: #ffffff;
-    }
-    .movie-info p {
-      font-size: 16px;
-      margin: 5px 0;
-      color: #000; /* Adjusted for better readability */
-    }
-    .movie-info button {
-      background: #6a0dad;
-      border: none;
-      color: #fff;
-      padding: 10px 20px;
-      font-size: 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    .movie-info button:hover {
-      background: #581a96;
-    }
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #fff;
-      color: #111;
-    }
-  </style>
-</head>
-<body>
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 120%;
+  left: 0;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 10;
+  padding: 5px 0; /* Reduce top and bottom padding for a smaller box */
+}
 
-<?php include 'header.php'; ?>
+.dropdown-content a {
+  color: #333;
+  padding: 8px 12px; /* Adjust padding to reduce height */
+  text-decoration: none;
+  font-size: 16px; /* Smaller font for compact design */
+  display: block;
+  transition: background-color 0.3s ease;
+}
 
-<!-- Preview Section Header -->
-<div class="section-header">Preview</div>
+.dropdown-content a:hover {
+  background-color: #f8f9fa;
+}
 
-<section class="hero-section">
-  <!-- Hero Carousel -->
-  <div class="hero-carousel" id="hero-carousel">
-    <div class="hero-slide">
-      <img src="Img/venom2.webp" alt="Venom - Let There Be Carnage">
-      <div class="movie-info">
-        <h1>Venom - Let There Be Carnage</h1>
-        <p>U/A • 2h 38m • Friday, Nov 1, 2024 • Action, Sci-fi • English, Hindi</p>
-        <p>Eddie Brock tries to revive his failing career by interviewing a serial killer, Cletus Kasady, who is on death row.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
+/* Search Bar */
+.search {
+  display: flex; /* Align the input and search icon */
+  align-items: center;
+  position: relative;
+}
+
+.search input[type="text"] {
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.3s ease;
+}
+
+.search input[type="text"]:focus {
+  border-color: #007BFF;
+}
+
+.search i {
+  position: absolute;
+  left: 10px;
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Login Button */
+
+.user-actions {
+  display: flex; /* Use flexbox to align items side by side */
+  align-items: center; /* Align items vertically */
+  gap: 10px; /* Add spacing between the search bar and button */
+}
+
+.btn-login {
+  margin-left: 10px; /* Add spacing from the search bar */
+  background: #007BFF;
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap; /* Prevent text from breaking to a new line */
+}
+
+.user-actions .btn-login a {
+  text-decoration: none;
+  color: white;
+}
+
+.user-actions .btn-login:hover {
+  background: #0056b3;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 1rem;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .dropdown-content {
+    position: static;
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    display: block;
+  }
+
+  .search input[type="text"] {
+    width: 100%;
+  }
+
+  .user-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
+</style>
+
+
+<header class="header">
+  <div class="logo">
+    <img src="phoenix.png" alt="Phoenix Logo">
+  </div>
+
+  <div class="nav">
+    <a href="#">Home</a>
+
+    <!-- Show Timings Section with Dropdown -->
+    <div class="dropdown">
+      <a href="#">Show Timings</a>
+      <div class="dropdown-content">
+        <a href="#">Morning Shows</a>
+        <a href="#">Afternoon Shows</a>
+        <a href="#">Evening Shows</a>
+        <a href="#">Late Shows</a>
       </div>
     </div>
-    <div class="hero-slide">
-      <img src="Img/aquaman.jpg" alt="Aquaman">
-      <div class="movie-info">
-        <h1>Aquaman</h1>
-        <p>U/A • 2h 30m • Sunday, Dec 1, 2024 • Action, Adventure • English, Hindi</p>
-        <p>Arthur Curry, the human-born heir to the underwater kingdom of Atlantis, goes on a quest to prevent a war between the worlds of ocean and land.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
-      </div>
-    </div>
-    <div class="hero-slide">
-      <img src="Img/kgf.jpg" alt="Kgf">
-      <div class="movie-info">
-        <h1>Kgf</h1>
-        <p>U/A • 2h 34m • Sunday, Dec 1, 2024 • Action, Adventure • Telugu, Hindi</p>
-        <p>In the 1970s, a gangster named Rocky goes undercover as a slave to assassinate the owner of a notorious gold mine known as the Kolar Gold Fields.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
-      </div>
-    </div>
-    <div class="hero-slide">
-      <img src="Img/aladdin.jpg" alt="Aladdin">
-      <div class="movie-info">
-        <h1>Aladdin</h1>
-        <p>U/A • 2h 10m • Saturday, Nov 30, 2024 • Fantasy, Romance • English, Hindi</p>
-        <p>Aladdin is a lovable street urchin who stumbles upon a magic oil lamp that unleashes a powerful, wisecracking genie.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
+
+    <!-- More Section with Dropdown -->
+    <div class="dropdown">
+      <a href="#">More</a>
+      <div class="dropdown-content">
+        <a href="contact.html">Contact</a>
+        <a href="about-us.html">About Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms & Conditions</a>
       </div>
     </div>
   </div>
-</section>
 
-<?php include 'quick_book.php'; ?>
-<?php include 'now_showing.php'; ?>
-
-<footer>
-  <p>&copy; <?php echo date('Y'); ?> Phoenix Cinemas. All Rights Reserved.</p>
-</footer>
-
-<script>
-const carousel = document.getElementById('hero-carousel');
-const slides = carousel.children;
-let currentIndex = 0;
-
-function showNextSlide() {
-  currentIndex = (currentIndex + 1) % slides.length;
-  carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-}
-
-setInterval(showNextSlide, 3000); // Slide changes every 3 seconds
-</script>
-
-</body>
-</html>
+  <div class="user-actions">
+    <div class="search">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search...">
+    </div>
+    <div>
+      <button class="btn-login"><a href="Login.php">Login</a></button>
+    </div>
+  </div>
+</header>
