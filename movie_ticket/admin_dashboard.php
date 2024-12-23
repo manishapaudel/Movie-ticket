@@ -97,7 +97,9 @@ $bookings = $bookingsStmt->fetchAll();
         <div class="tab-content mt-4">
             <!-- Movies Tab -->
             <div class="tab-pane fade show active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
-                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addMovieModal">Add Movie</button>
+                <!-- Add Movie Link -->
+<a href="add_movie.php" class="btn btn-primary mb-3">Add Movie</a>
+
                 <table id="moviesTable" class="table table-bordered table-striped">
                     <thead class="table-dark">
                         <tr>
@@ -107,6 +109,7 @@ $bookings = $bookingsStmt->fetchAll();
                             <th>Duration</th>
                             <th>Description</th>
                             <th>Poster</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -214,48 +217,6 @@ $bookings = $bookingsStmt->fetchAll();
             </div>
         </div>
     </div>
-
-    <!-- Modal for Adding Movie -->
-    <div class="modal fade" id="addMovieModal" tabindex="-1" aria-labelledby="addMovieModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addMovieModalLabel">Add New Movie</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="add_movie.php" method="POST" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="movieTitle" class="form-label">Title</label>
-                            <input type="text" name="title" id="movieTitle" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="movieGenre" class="form-label">Genre</label>
-                            <input type="text" name="genre" id="movieGenre" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="movieDuration" class="form-label">Duration (mins)</label>
-                            <input type="number" name="duration" id="movieDuration" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea name="description" id="description" class="form-control" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="poster" class="form-label">Upload Poster</label>
-                            <input type="file" id="poster" name="poster" class="form-control" accept="image/*" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Movie</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    
 
     <!-- Scripts -->
     <script>

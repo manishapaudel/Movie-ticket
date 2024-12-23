@@ -8,14 +8,20 @@ if (!isset($_SESSION['admin_id'])) {
 // Database connection
 $conn = new PDO("mysql:host=localhost;dbname=cinemas", "root", "");
 
+// Initialize messages
 $error = '';
 $success = '';
 
+// Define genres manually or fetch them dynamically if still needed
+$genres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $genre = $_POST['genre'];
     $duration = $_POST['duration'];
     $description = $_POST['description'];
+    $posterNewName = null;
 
     // Handle file upload
     if (isset($_FILES['poster']) && $_FILES['poster']['error'] == UPLOAD_ERR_OK) {
@@ -23,25 +29,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $posterName = $_FILES['poster']['name'];
         $posterExt = strtolower(pathinfo($posterName, PATHINFO_EXTENSION));
         $allowedExts = ['jpg', 'jpeg', 'png'];
+        $maxFileSize = 2 * 1024 * 1024; // 2MB
 
         if (!in_array($posterExt, $allowedExts)) {
             $error = "Invalid file format. Only JPG, JPEG, and PNG are allowed.";
+        } elseif ($_FILES['poster']['size'] > $maxFileSize) {
+            $error = "File size exceeds 2MB.";
         } else {
             $posterNewName = uniqid() . "." . $posterExt;
             move_uploaded_file($posterTmpName, "uploads/" . $posterNewName);
         }
-    } else {
-        $posterNewName = null; // No poster uploaded
     }
 
     if (empty($error)) {
         if (empty($title) || empty($genre) || empty($duration)) {
             $error = "Title, genre, and duration are required.";
         } else {
-            // Insert into database
-            $stmt = $conn->prepare("INSERT INTO movies (title, genre, duration, description, poster) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $genre, $duration, $description, $posterNewName]);
-            $success = "Movie added successfully!";
+            // Insert movie data into the database
+            try {
+                $stmt = $conn->prepare(
+                    "INSERT INTO movies (title, genre, duration, description, poster) VALUES (?, ?, ?, ?, ?)"
+                );
+                $stmt->execute([$title, $genre, $duration, $description, $posterNewName]);
+                $success = "Movie added successfully!";
+            } catch (PDOException $e) {
+                $error = "Error adding movie: " . htmlspecialchars($e->getMessage());
+            }
         }
     }
 }
@@ -53,137 +66,177 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Movie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/toastr/build/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: '#description',
+            height: 200,
+            menubar: false
+        });
+
+        // Display Toast notifications for success/error messages
+        <?php if ($success): ?>
+        toastr.success("<?= $success; ?>");
+        <?php elseif ($error): ?>
+        toastr.error("<?= $error; ?>");
+        <?php endif; ?>
+    </script>
     <style>
+        /* Custom Styles */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f9f9f9;
+            background: linear-gradient(pink, pink, blue, blue);
+            animation: gradientBG 10s ease infinite;
+            font-family: 'Arial', sans-serif;
         }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #fff;
+
+        .card {
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        input[type="text"], input[type="number"], textarea, select, input[type="file"] {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            width: 100%;
-        }
-        .btn {
-            padding: 10px 20px;
-            background: #007bff;
-            color: #fff;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s ease;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            background: #111;
         }
-        .btn:hover {
-            background: #0056b3;
+
+        .form-label {
+            color: #fff;  /* Changed to white color */
         }
-        .btn-secondary {
-            background: #6c757d;
-            text-align: center;
+
+        .card-body {
+            padding: 2rem;
         }
-        .btn-secondary:hover {
-            background: #565e64;
+
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d87f0;
         }
-        .message {
-            text-align: center;
-            margin-bottom: 15px;
+
+        .btn-primary {
+            background-color: #2d87f0;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #1f6cc7;
+        }
+
+        .form-control {
+            border-radius: 8px;
             padding: 10px;
-            border-radius: 5px;
+            border: 1px solid #ced4da;
+            transition: border-color 0.3s;
         }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
+
+        .form-control:focus {
+            border-color: #2d87f0;
+            box-shadow: 0 0 8px rgba(45, 135, 240, 0.5);
         }
-        .success {
-            background: #d4edda;
-            color: #155724;
+
+        .form-select {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            transition: border-color 0.3s;
+        }
+
+        .form-select:focus {
+            border-color: #2d87f0;
+            box-shadow: 0 0 8px rgba(45, 135, 240, 0.5);
+        }
+
+        /* More specific selector for the small text with the 'form-text' class */
+        .form-control + .form-text {
+            font-size: 0.875rem;
+            color: #fff !important;  /* Force white color */
+        }
+
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+
+        .alert {
+            font-size: 1rem;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .text-primary {
+            color: #2d87f0 !important;
         }
     </style>
-    <script>
-        function validateForm() {
-            const title = document.getElementById('title').value.trim();
-            const genre = document.getElementById('genre').value.trim();
-            const duration = document.getElementById('duration').value.trim();
-
-            if (!title || !genre || !duration) {
-                alert('Please fill in all required fields.');
-                return false;
-            }
-
-            if (duration <= 0) {
-                alert('Duration must be greater than 0.');
-                return false;
-            }
-
-            return true;
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Add Movie</h1>
 
-        <?php if (!empty($error)): ?>
-            <div class="message error"><?= $error; ?></div>
-        <?php endif; ?>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-light">
+                <div class="card-body">
+                    <h1 class="text-center text-primary mb-4">Add New Movie</h1>
 
-        <?php if (!empty($success)): ?>
-            <div class="message success"><?= $success; ?></div>
-        <?php endif; ?>
+                    <!-- Form for adding movie -->
+                    <form method="POST" action="" enctype="multipart/form-data" id="addMovieForm">
+                        <!-- Display messages -->
+                        <?php if (!empty($error)): ?>
+                            <div class="alert alert-danger"><?= $error; ?></div>
+                        <?php endif; ?>
+                        <?php if (!empty($success)): ?>
+                            <div class="alert alert-success"><?= $success; ?></div>
+                        <?php endif; ?>
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Movie Title</label>
+                            <input type="text" id="title" name="title" class="form-control" placeholder="Enter movie title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="genre" class="form-label">Genre</label>
+                            <select id="genre" name="genre" class="form-select" required>
+                                <option value="">-- Select Genre --</option>
+                                <?php foreach ($genres as $genre): ?>
+                                    <option value="<?= htmlspecialchars($genre); ?>"><?= htmlspecialchars($genre); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duration (in minutes)</label>
+                            <input type="number" id="duration" name="duration" class="form-control" min="1" placeholder="Enter movie duration" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" name="description" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="poster" class="form-label">Movie Poster</label>
+                            <input type="file" id="poster" name="poster" class="form-control" accept="image/*" required>
+                            <small class="form-text text-muted">Allowed formats: JPG, JPEG, PNG. Max size: 2MB.</small>
+                        </div>
 
-        <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm()">
-            <label for="title">Title</label>
-            <input type="text" id="title" name="title" placeholder="Enter movie title" required>
+                        <button type="submit" class="btn btn-primary w-100">Add Movie</button>
+                    </form>
 
-            <label for="genre">Genre</label>
-            <select id="genre" name="genre" required>
-                <option value="">-- Select Genre --</option>
-                <option value="Action">Action</option>
-                <option value="Comedy">Comedy</option>
-                <option value="Drama">Drama</option>
-                <option value="Horror">Horror</option>
-                <option value="Sci-Fi">Sci-Fi</option>
-            </select>
-
-            <label for="duration">Duration (in minutes)</label>
-            <input type="number" id="duration" name="duration" min="1" placeholder="Enter movie duration" required>
-
-            <label for="description">Description</label>
-            <textarea id="description" name="description" rows="4" placeholder="Enter a brief description of the movie"></textarea>
-
-            <label for="poster">Upload Poster</label>
-            <input type="file" id="poster" name="poster" accept="image/*">
-
-            <button type="submit" class="btn">Add Movie</button><br>
-
-            <a href="admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
-        </form>
+                    <div class="text-center mt-3">
+                        <a href="admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Include Toastr JS for notifications -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastr/build/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

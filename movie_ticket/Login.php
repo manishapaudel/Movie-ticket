@@ -98,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0.5rem 0 0.2rem;
             font-weight: bold;
             color: #fff;
+            text-align: left;
         }
 
         input {
@@ -187,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             input {
                 background: #fff;
                 border: 1px solid #444;
-                color: #f5f5f5;
+                color: #111;
             }
 
             input:focus {
