@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cinemas";
+$dbname = "mydb";
 
 try {
     // Establish connection using PDO
