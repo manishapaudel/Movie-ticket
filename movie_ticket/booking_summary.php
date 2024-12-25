@@ -1,57 +1,3 @@
-<?php
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mydb";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Handle booking confirmation
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $selectedSeats = json_decode($_POST['selectedSeats'], true);
-    $totalPrice = $_POST['totalPrice'];
-    $bookingDate = $_POST['bookingDate'];
-
-    if (!empty($selectedSeats) && !empty($bookingDate)) {
-        // Insert booking into bookings table
-        $stmt = $conn->prepare("INSERT INTO bookings (user_id, selected_seats, total_price, booking_date) VALUES (?, ?, ?, ?)");
-        $userId = 1; // Example user ID, adjust as needed
-        $selectedSeatsStr = implode(",", $selectedSeats);
-        $stmt->bind_param("isis", $userId, $selectedSeatsStr, $totalPrice, $bookingDate);
-        $stmt->execute();
-
-        // Update seat status
-        foreach ($selectedSeats as $seatId) {
-            $updateStmt = $conn->prepare("UPDATE seats SET status = 'occupied' WHERE id = ?");
-            $updateStmt->bind_param("i", $seatId);
-            $updateStmt->execute();
-        }
-
-        echo "<h1>Booking Confirmed!</h1>";
-        echo "<p>Total Price: ₹$totalPrice</p>";
-        echo "<p>Booking Date: $bookingDate</p>";
-        echo "<p>Selected Seats: " . implode(", ", $selectedSeats) . "</p>";
-
-        exit;
-    }
-}
-
-// Fetch seat data
-$result = $conn->query("SELECT * FROM seats");
-$seatsData = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $seatsData[] = $row;
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,14 +5,92 @@ if ($result->num_rows > 0) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seat Booking System</title>
   <style>
-    .seat-container { margin: 20px; }
-    .seats-row { display: flex; margin: 5px; justify-content: center; }
-    .seat { width: 30px; height: 30px; margin: 5px; border: 1px solid #999; text-align: center; line-height: 30px; cursor: pointer; border-radius: 5px; }
-    .available { background-color: #f1f1f1; }
-    .occupied { background-color: #666; cursor: not-allowed; }
-    .selected { background-color: #28a745; }
-    .booking-summary { margin-top: 20px; padding: 15px; border: 1px solid #ccc; max-width: 400px; background-color: #f9f9f9; }
-    .booking-summary button { padding: 10px 20px; background: #28a745; color: #fff; border: none; cursor: pointer; border-radius: 5px; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .seat-container {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .seats-row {
+      display: flex;
+      justify-content: center;
+      margin: 5px;
+    }
+    .seat {
+      width: 40px;
+      height: 40px;
+      margin: 5px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .seat:hover {
+      transform: scale(1.1);
+    }
+    .available {
+      background-color: #e0e7ff;
+    }
+    .occupied {
+      background-color: #94a3b8;
+      cursor: not-allowed;
+    }
+    .selected {
+      background-color: #22c55e;
+    }
+    .booking-summary {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    .booking-summary h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .booking-summary button {
+      width: 100%;
+      padding: 10px;
+      background: #22c55e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    .booking-summary button:hover {
+      background: #16a34a;
+    }
+    input[type="date"] {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -74,17 +98,14 @@ if ($result->num_rows > 0) {
   <h1>Seat Booking System</h1>
   <div class="seat-container" id="seatContainer">
     <?php
-      // Group seats by rows for rendering
       $rows = ['A', 'B'];
       foreach ($rows as $row) {
           echo '<div class="seats-row">';
           foreach ($seatsData as $seat) {
               if (strpos($seat['number'], $row) === 0) {
                   $class = $seat['status'] === 'available' ? 'available' : 'occupied';
-                  echo "<div class='seat $class' 
-                            data-id='{$seat['id']}' 
-                            data-price='{$seat['price']}'>
-                            {$seat['number']}
+                  echo "<div class='seat $class' data-id='{$seat['id']}' data-price='{$seat['price']}'>
+                          {$seat['number']}
                         </div>";
               }
           }
@@ -102,7 +123,6 @@ if ($result->num_rows > 0) {
       <input type="date" id="bookingDate" name="bookingDate" required>
       <input type="hidden" id="selectedSeatsInput" name="selectedSeats">
       <input type="hidden" id="totalPriceInput" name="totalPrice">
-      <br><br>
       <button type="submit">Confirm Booking</button>
     </form>
   </div>

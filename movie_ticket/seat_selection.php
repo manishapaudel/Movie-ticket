@@ -245,8 +245,8 @@
 <div class="modal" id="confirmation-modal">
     <p>Confirm your seat selection?</p>
     <div class="modal-buttons">
-        <button id="confirm-selection">Confirm</button>
-        <button id="cancel-selection">Cancel</button>
+        <button id="confirm-selection" ><a href="booking_summary.php">Confirm</a></button>
+        <button id="cancel-selection"><a href="index.php">Cancel</a></button>
     </div>
 </div>
 <div class="overlay" id="overlay"></div>
