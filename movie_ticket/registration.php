@@ -2,146 +2,181 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include 'config.php';
 
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     $retype_password = $_POST['retype_password'];
+    $message = '';
 
-    // Validate inputs
+    // Validate passwords match
     if ($password !== $retype_password) {
-        $message = "<div class='error'>Passwords do not match!</div>";
+        $message = '<p class="error">Passwords do not match!</p>';
     } else {
-        // Hash the password
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
         try {
             $stmt = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
             $stmt->execute([$email, $hashed_password]);
-            $message = "<div class='success'>Registration successful! <a href='Login.php'>Login here</a></div>";
+            $message = '<p class="success">Registration successful! <a href="login.php" class="link">Login here</a></p>';
         } catch (PDOException $e) {
-            if ($e->errorInfo[1] == 1062) { // Duplicate entry
-                $message = "<div class='error'>Email is already registered!</div>";
+            if ($e->errorInfo[1] == 1062) { // Duplicate email
+                $message = '<p class="error">Email is already registered!</p>';
             } else {
-                $message = "<div class='error'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</div>";
+                $message = '<p class="error">An error occurred. Please try again later.</p>';
             }
         }
     }
 }
 ?>
 
-
-  
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>User Registration</title>
     <style>
-        
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(pink, pink, blue, blue);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #f9f9f9;
-            color: #333;
+            margin: 0;
         }
-        .container {
-            background: #fff;
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .register-container {
+            background: #252525;
             padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1rem;
             text-align: center;
         }
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #007BFF;
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
         label {
-            display: block;
-            font-size: 0.9rem;
-            text-align: left;
-            margin-bottom: 0.5rem;
             font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 0.7rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            outline: none;
-            box-sizing: border-box;
-        }
-        input:focus {
-            border-color: #007BFF;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-        }
-        button {
-            width: 100%;
-            padding: 0.7rem;
-            font-size: 1rem;
-            background: #007BFF;
             color: #fff;
+        }
+
+        input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            background: #fff;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.8);
+            transform: scale(1.03);
+        }
+
+        button {
+            padding: 0.8rem;
+            background-color: #2575fc;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.2s ease;
             cursor: pointer;
-            transition: background 0.3s;
         }
+
         button:hover {
-            background: #0056b3;
+            background-color: #1a5bbf;
+            transform: scale(1.05);
         }
-        a {
-            display: inline-block;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #007BFF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .error, .success {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
+
         .error {
-            color: #ff0000;
-            background: #ffe6e6;
+            color: #ff4d4d;
+            font-size: 0.9rem;
+            text-align: center;
         }
+
         .success {
             color: #28a745;
-            background: #e6ffed;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .link {
+            color: #2575fc;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Register</h1>
-        <?php if (isset($message)) echo $message; ?>
-        <form method="POST" action="">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="retype_password">Retype Password</label>
-            <input type="password" id="retype_password" name="retype_password" required>
-            
-            <button type="submit">Register</button>
-        </form>
-        <a href="Login.php">Already have an account? Login here</a>
+<div class="register-container">
+    <h1>Register</h1>
+    <?php if (!empty($message)) echo $message; ?>
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <div class="form-group">
+            <label for="retype_password">Retype Password:</label>
+            <input type="password" id="retype_password" name="retype_password" placeholder="Retype your password" required>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <div style="text-align: center; margin-top: 10px;">
+        <a href="login.php" class="link">← Back to Login</a>
     </div>
+</div>
 </body>
 </html>

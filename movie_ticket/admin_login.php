@@ -1,20 +1,28 @@
 <?php
 session_start();
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    include 'config.php';
+include 'config.php'; // Include your database connection
 
-    $username = $_POST['username'];
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT * FROM admins WHERE username = ?");
-    $stmt->execute([$username]);
+    // Query the database to check credentials
+    $stmt = $conn->prepare("SELECT * FROM admins WHERE email = ?");
+    $stmt->execute([$email]);
     $admin = $stmt->fetch();
 
-    if ($admin && password_verify($password, $admin['password'])) {
-        $_SESSION['admin_id'] = $admin['id'];
-        header("Location: admin_dashboard.php");
+    if ($admin) {
+        if (password_verify($password, $admin["password"])) {
+            // Set session and redirect to admin dashboard
+            $_SESSION['admin_id'] = $admin['id'];
+            header("Location: admin_dashboard.php");
+            exit;
+        } else {
+            $error = 'Password does not match.';
+        }
     } else {
-        $error = "Invalid username or password!";
+        $error = 'No email address found.';
     }
 }
 ?>
@@ -26,10 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     <style>
-        /* Minimalist CSS */
         body {
             font-family: Arial, sans-serif;
-            background: #f7f9fc;
+            background: linear-gradient(pink, pink, blue, blue);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,83 +46,159 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .login-container {
-            background: #fff;
+            background: #252525;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 400px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
+            color: #fff;
             margin-bottom: 1rem;
-            color: #333;
+            text-align: center;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         label {
-            display: block;
-            margin: 0.5rem 0 0.3rem;
-            font-size: 1rem;
-            color: #555;
+            font-weight: bold;
+            color: #fff;
         }
 
-        input {
-            width: 100%;
-            padding: 0.7rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
+        input[type="email"],
+        input[type="password"] {
+            width: 94%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
+            background: #fff;
+            color: #333;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.8);
+            transform: scale(1.03);
         }
 
         button {
             width: 100%;
-            padding: 0.7rem;
-            font-size: 1rem;
-            color: #fff;
-            background: #007BFF;
+            padding: 0.8rem;
+            background-color: #2575fc;
             border: none;
             border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.2s ease;
             cursor: pointer;
-            transition: background 0.3s ease;
         }
 
         button:hover {
-            background: #0056b3;
+            background-color: #1a5bbf;
+            transform: scale(1.05);
         }
 
-        p {
-            color: #ff0000;
+        .error {
+            color: #ff4d4d;
             font-size: 0.9rem;
-            margin-top: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: slideIn 0.5s ease;
         }
 
-        .footer-link {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #007BFF;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .link {
+            color: #2575fc;
             text-decoration: none;
+            font-size: 0.9rem;
         }
 
-        .footer-link:hover {
+        .link:hover {
             text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Admin Login</h1>
-        <form method="POST" action="">
-            <label for="username">Username:</label>
-            <input type="text" name="username" placeholder="Enter username" required>
+<div class="login-container">
+    <h1>Admin Login</h1>
+    <?php if ($error): ?>
+        <p class="error"><?= htmlspecialchars($error); ?></p>
+    <?php endif; ?>
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" name="password" placeholder="Enter password" required>
-            <button type="submit">Login</button>
-        </form>
-        <?php if (isset($error)) echo "<p>$error</p>"; ?>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <div style="text-align: center; margin-top: 10px;">
+        <a href="index.php" class="link">← Back to Home</a>
     </div>
+</div>
 </body>
 </html>

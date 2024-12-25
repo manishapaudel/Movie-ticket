@@ -16,7 +16,7 @@ body {
 /* Header Section */
 .header {
   background: #ffffff;
-  padding: 15px 2rem;
+  padding: 10px 1rem; /* Reduce padding for smaller header height */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,7 +25,6 @@ body {
   top: 0;
   z-index: 1000;
 }
-
 .logo img {
   height: 40px;
   width: auto;
@@ -41,7 +40,7 @@ body {
 .nav a {
   text-decoration: none;
   color: #333;
-  font-size: 0.95rem;
+  font-size: 18px;
   font-weight: 500;
   padding: 8px 12px;
   transition: all 0.3s ease;
@@ -72,13 +71,14 @@ body {
   border-radius: 4px;
   overflow: hidden;
   z-index: 10;
+  padding: 5px 0; /* Reduce top and bottom padding for a smaller box */
 }
 
 .dropdown-content a {
   color: #333;
-  padding: 10px 15px;
+  padding: 8px 12px; /* Adjust padding to reduce height */
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 16px; /* Smaller font for compact design */
   display: block;
   transition: background-color 0.3s ease;
 }
@@ -89,9 +89,9 @@ body {
 
 /* Search Bar */
 .search {
-  position: relative;
-  display: flex;
+  display: flex; /* Align the input and search icon */
   align-items: center;
+  position: relative;
 }
 
 .search input[type="text"] {
@@ -117,7 +117,15 @@ body {
 }
 
 /* Login Button */
-.user-actions .btn-login {
+
+.user-actions {
+  display: flex; /* Use flexbox to align items side by side */
+  align-items: center; /* Align items vertically */
+  gap: 10px; /* Add spacing between the search bar and button */
+}
+
+.btn-login {
+  margin-left: 10px; /* Add spacing from the search bar */
   background: #007BFF;
   color: white;
   padding: 8px 20px;
@@ -126,6 +134,7 @@ body {
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  white-space: nowrap; /* Prevent text from breaking to a new line */
 }
 
 .user-actions .btn-login a {
@@ -170,8 +179,6 @@ body {
 }
 
 
-
-
 </style>
 
 
@@ -182,7 +189,7 @@ body {
 
   <div class="nav">
     <a href="#">Home</a>
-    
+
     <!-- Show Timings Section with Dropdown -->
     <div class="dropdown">
       <a href="#">Show Timings</a>
@@ -195,7 +202,7 @@ body {
     </div>
 
     <!-- More Section with Dropdown -->
-    <!<div class="dropdown">
+    <div class="dropdown">
       <a href="#">More</a>
       <div class="dropdown-content">
         <a href="contact.html">Contact</a>
@@ -210,7 +217,9 @@ body {
     <div class="search">
       <i class="bi bi-search"></i>
       <input type="text" placeholder="Search...">
-    
-    <div><button class="btn-login"><a href="Login.php">Login</a></button></div>
- 
+    </div>
+    <div>
+      <button class="btn-login"><a href="Login.php">Login</a></button>
+    </div>
+  </div>
 </header>

@@ -2,13 +2,13 @@
     /* Now Showing Section */
 
 .now-showing {
-  background: #222;
+  background: linear-gradient(pink, blue);
   padding: 2rem 0;
 }
 
 .now-showing h3 {
-  color: #7c4afa;
-  font-size: 2rem;
+  color: #111;
+  font-size: 50px;
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -22,25 +22,27 @@
 
 .movie-card {
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   text-align: center;
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  padding: 1rem;
+  height: 100%; /* Ensures cards stretch equally */
+  width: 80%;
 }
 
 .movie-card img {
-  width: 100%;           /* Ensures the image takes the full width of the card */
-  height: 300px;         /* Fixed height to enforce uniform size */
-  object-fit: cover;     /* Crops and centers the image within the given dimensions */
+  width: 100%;           /* Full card width */
+  height: 300px;         /* Fixed height for all images */
+  object-fit: fit;     /* Centers and crops the image */
   border-radius: 10px;   /* Keeps the rounded corner style */
 }
 
 .movie-details {
+  flex-grow: 1; /* Pushes content to align properly */
   margin-top: 1rem;
 }
 
@@ -53,23 +55,27 @@
 .movie-details p {
   color: #555;
   font-size: 0.9rem;
-  margin: 0.5rem 0 1rem 0; /* Ensure space between details and button */
+  margin: 0.5rem 0 1rem 0;
+  text-overflow: ellipsis; /* Truncates text if it's too long */
+  overflow: hidden;
+  white-space: nowrap; /* Prevents text wrapping */
 }
 
 .movie-card button.btn-book {
-  margin: 0 auto; /* Center-align button */
+  margin: 20px; /* Ensures the button is pushed to the bottom */
+  margin-top: auto;
   padding: 10px 20px;
-  background: #7c4afa;
+  background: #111;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
-
 .movie-card button.btn-book:hover {
   background: #6a3fdf;
 }
+
 </style>
 
 <?php

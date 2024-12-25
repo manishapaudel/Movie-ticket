@@ -1,13 +1,16 @@
 <?php
-// Mock seat data (usually fetched from a database)
-$seatsData = [
-    ['id' => 1, 'number' => 'A1', 'price' => 450, 'status' => 'available'],
-    ['id' => 2, 'number' => 'A2', 'price' => 450, 'status' => 'available'],
-    ['id' => 3, 'number' => 'A3', 'price' => 450, 'status' => 'occupied'],
-    ['id' => 4, 'number' => 'B1', 'price' => 450, 'status' => 'available'],
-    ['id' => 5, 'number' => 'B2', 'price' => 450, 'status' => 'occupied'],
-    ['id' => 6, 'number' => 'B3', 'price' => 450, 'status' => 'available']
-];
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mydb";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Handle booking confirmation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,29 +18,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $totalPrice = $_POST['totalPrice'];
     $bookingDate = $_POST['bookingDate'];
 
-    // Process the booking (e.g., store in a database)
-    // Example: Insert the booking details into the database
+    if (!empty($selectedSeats) && !empty($bookingDate)) {
+        // Insert booking into bookings table
+        $stmt = $conn->prepare("INSERT INTO bookings (user_id, selected_seats, total_price, booking_date) VALUES (?, ?, ?, ?)");
+        $userId = 1; // Example user ID, adjust as needed
+        $selectedSeatsStr = implode(",", $selectedSeats);
+        $stmt->bind_param("isis", $userId, $selectedSeatsStr, $totalPrice, $bookingDate);
+        $stmt->execute();
 
-    // Example: Database logic (replace with actual database connection)
-    // $conn = new mysqli($servername, $username, $password, $dbname);
-    // $stmt = $conn->prepare("INSERT INTO bookings (total_price, booking_date) VALUES (?, ?)");
-    // $stmt->bind_param("is", $totalPrice, $bookingDate);
-    // $stmt->execute();
-    // $bookingId = $conn->insert_id;
+        // Update seat status
+        foreach ($selectedSeats as $seatId) {
+            $updateStmt = $conn->prepare("UPDATE seats SET status = 'occupied' WHERE id = ?");
+            $updateStmt->bind_param("i", $seatId);
+            $updateStmt->execute();
+        }
 
-    // Insert booked seats
-    // foreach ($selectedSeats as $seatId) {
-    //    $stmt = $conn->prepare("UPDATE seats SET status = 'occupied' WHERE id = ?");
-    //    $stmt->bind_param("i", $seatId);
-    //    $stmt->execute();
-    // }
+        echo "<h1>Booking Confirmed!</h1>";
+        echo "<p>Total Price: ₹$totalPrice</p>";
+        echo "<p>Booking Date: $bookingDate</p>";
+        echo "<p>Selected Seats: " . implode(", ", $selectedSeats) . "</p>";
 
-    echo "<h1>Booking Confirmed!</h1>";
-    echo "<p>Total Price: ₹$totalPrice</p>";
-    echo "<p>Booking Date: $bookingDate</p>";
-    echo "<p>Selected Seats: " . implode(", ", $selectedSeats) . "</p>";
+        exit;
+    }
+}
 
-    exit;
+// Fetch seat data
+$result = $conn->query("SELECT * FROM seats");
+$seatsData = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $seatsData[] = $row;
+    }
 }
 ?>
 
@@ -46,9 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Booking System</title>
+  <title>Seat Booking System</title>
   <style>
-    /* Seat Layout and Summary Styling */
     .seat-container { margin: 20px; }
     .seats-row { display: flex; margin: 5px; justify-content: center; }
     .seat { width: 30px; height: 30px; margin: 5px; border: 1px solid #999; text-align: center; line-height: 30px; cursor: pointer; border-radius: 5px; }
@@ -61,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-  <h1>Booking Summary</h1>
+  <h1>Seat Booking System</h1>
   <div class="seat-container" id="seatContainer">
     <?php
       // Group seats by rows for rendering
@@ -98,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 
   <script>
-    // Handle seat selection
     let selectedSeats = [];
     let totalPrice = 0;
 
