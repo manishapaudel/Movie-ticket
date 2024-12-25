@@ -1,46 +1,3 @@
-<?php
-session_start();
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    include 'config.php';
-
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    try {
-        // Prepare the statement with placeholders
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-        // Bind the parameter
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        // Execute the statement
-        $stmt->execute();
-        // Fetch the user data
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Verify password
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            ?>
-            <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; color: #333;">
-                <div style="background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center;">
-                    <div style="font-size: 1.2rem; color: #28a745; background: #e6ffed; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
-                        Login successful! Welcome, <?= htmlspecialchars($user['email']); ?>.
-                    </div>
-                    <a href="index.php" style="display: inline-block; padding: 0.7rem 1.5rem; font-size: 1rem; background: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; transition: background 0.3s;">Go to Dashboard</a>
-                </div>
-            </div>
-            <?php
-        } else {
-            echo "<div class='error'>Invalid email or password!</div>";
-        }
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
-}
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 1rem;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
         }
         .btn {
             display: inline-block;
@@ -105,13 +63,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .link:hover {
             text-decoration: underline;
         }
-        .error {
-            color: #FF0000;
+        .password-container {
+            position: relative;
             margin-bottom: 1rem;
         }
-        .success {
-            color: #28a745;
-            margin-bottom: 1rem;
+        .password-container input {
+            padding-right: 2.5rem;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1rem;
+            color: #007BFF;
         }
     </style>
 </head>
@@ -121,13 +87,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" action="login.php">
             <label for="email">Email:</label>
             <input type="email" name="email" required>
+
             <label for="password">Password:</label>
-            <input type="password" name="password" required>
+            <div class="password-container">
+                <input type="password" name="password" id="password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+            </div>
+
             <button type="submit" class="btn">Login</button>
         </form>
         <a href="registration.php" class="link">Don't have an account? Register here</a><br>
         <a href="admin_login.php" class="link">Login as Admin</a>
-
     </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+    </script>
 </body>
 </html>
