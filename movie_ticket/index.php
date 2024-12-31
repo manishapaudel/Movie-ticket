@@ -67,6 +67,7 @@
       padding: 20px;
       box-sizing: border-box;
     }
+    
 
     .hero-slide img {
       max-width: 30%; /* Restrict image width */
