@@ -104,6 +104,7 @@
     }
     .booking-summary button:hover {
       background: #16a34a;
+      transform: scale(1.05);
     }
 
     /* Khalti Payment Button */
@@ -129,7 +130,7 @@
     }
     .khalti-button img {
       margin-right: 10px;
-      width: 25px;
+      width: 30px;
       height: 25px;
     }
 
