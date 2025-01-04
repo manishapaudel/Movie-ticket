@@ -97,21 +97,44 @@
 
   <h1>Seat Booking System</h1>
   <div class="seat-container" id="seatContainer">
-    <?php
-      $rows = ['A', 'B'];
-      foreach ($rows as $row) {
-          echo '<div class="seats-row">';
-          foreach ($seatsData as $seat) {
-              if (strpos($seat['number'], $row) === 0) {
-                  $class = $seat['status'] === 'available' ? 'available' : 'occupied';
-                  echo "<div class='seat $class' data-id='{$seat['id']}' data-price='{$seat['price']}'>
-                          {$seat['number']}
-                        </div>";
-              }
-          }
-          echo '</div>';
+    
+  <?php
+  include 'config.php'; // Ensure this file initializes a PDO connection in the variable $conn
+
+  try {
+      // Fetch seat data from the database
+      $sql = "SELECT * FROM seats";
+      $stmt = $conn->prepare($sql); // Use PDO's prepare statement
+      $stmt->execute();
+  
+      // Fetch all rows as an associative array
+      $seatsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  
+      if (!$seatsData) {
+          echo "No seats data found.";
       }
-    ?>
+  } catch (PDOException $e) {
+      echo "Error fetching seat data: " . $e->getMessage();
+  }
+  
+$rows = ['A', 'B'];
+foreach ($rows as $row) {
+    echo '<div class="seats-row">';
+    foreach ($seatsData as $seat) {
+        if (strpos($seat['number'], $row) === 0) {
+            $class = $seat['status'] === 'available' ? 'available' : 'occupied';
+            echo "<div class='seat $class' data-id='{$seat['id']}' data-price='{$seat['price']}'>
+                    {$seat['number']}
+                  </div>";
+        }
+    }
+    echo '</div>';
+}
+?>
+
+    
+     
+    
   </div>
 
   <div class="booking-summary">
