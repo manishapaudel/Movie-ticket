@@ -181,45 +181,52 @@ body {
 
 </style>
 
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="phoenix.png" alt="Phoenix Logo">
+        </div>
 
-<header class="header">
-  <div class="logo">
-    <img src="phoenix.png" alt="Phoenix Logo">
-  </div>
+        <div class="nav">
+            <a href="#">Home</a>
 
-  <div class="nav">
-    <a href="#">Home</a>
+            <div class="dropdown">
+                <a href="#">Show Timings</a>
+                <div class="dropdown-content">
+                    <a href="#">Morning Shows</a>
+                    <a href="#">Afternoon Shows</a>
+                    <a href="#">Evening Shows</a>
+                    <a href="#">Late Shows</a>
+                </div>
+            </div>
 
-    <!-- Show Timings Section with Dropdown -->
-    <div class="dropdown">
-      <a href="#">Show Timings</a>
-      <div class="dropdown-content">
-        <a href="#">Morning Shows</a>
-        <a href="#">Afternoon Shows</a>
-        <a href="#">Evening Shows</a>
-        <a href="#">Late Shows</a>
-      </div>
-    </div>
+            <div class="dropdown">
+                <a href="#">More</a>
+                <div class="dropdown-content">
+                    <a href="contact.html">Contact</a>
+                    <a href="about-us.html">About Us</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
 
-    <!-- More Section with Dropdown -->
-    <div class="dropdown">
-      <a href="#">More</a>
-      <div class="dropdown-content">
-        <a href="contact.html">Contact</a>
-        <a href="about-us.html">About Us</a>
-        <a href="faq.html">FAQ</a>
-        <a href="terms.html">Terms & Conditions</a>
-      </div>
-    </div>
-  </div>
+        <div class="user-actions">
+            <div class="search">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search...">
+            </div>
 
-  <div class="user-actions">
-    <div class="search">
-      <i class="bi bi-search"></i>
-      <input type="text" placeholder="Search...">
-    </div>
-    <div>
-      <button class="btn-login"><a href="Login.php">Login</a></button>
-    </div>
-  </div>
-</header>
+            <?php if (isset($_SESSION['email'])): ?>
+                <div class="user-info">
+                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: #007BFF;"></i>
+                    <span>Welcome, <?= htmlspecialchars($_SESSION['email']) ?></span>
+                </div>
+            <?php else: ?>
+                <button class="btn-login">
+                    <a href="login.php">Login</a>
+                </button>
+            <?php endif; ?>
+        </div>
+    </header>
