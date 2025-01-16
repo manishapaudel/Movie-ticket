@@ -1,3 +1,50 @@
+<<<<<<< HEAD
+=======
+<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Include the database configuration
+    include 'config.php';
+
+    try {
+        // Check if email and password are provided
+        if (!isset($_POST['email']) || empty(trim($_POST['email'])) || 
+            !isset($_POST['password']) || empty(trim($_POST['password']))) {
+            throw new Exception("Email and password are required.");
+        }
+
+        // Sanitize and validate the input
+        $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+        $password = trim($_POST['password']);
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception("Invalid email format.");
+        }
+
+        // Prepare the SQL statement to prevent SQL injection
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Check if the user exists and the password matches
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            $successMessage = "Login successful! Welcome, " . htmlspecialchars($user['email']);
+        } else {
+            $errorMessage = "Invalid email or password.";
+        }
+    } catch (PDOException $e) {
+        $errorMessage = "Database error: " . $e->getMessage();
+    } catch (Exception $e) {
+        $errorMessage = $e->getMessage();
+    }
+}
+?>
+
+>>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,9 +109,15 @@
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1rem;
+<<<<<<< HEAD
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+=======
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+>>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
         }
 
         input:focus {
