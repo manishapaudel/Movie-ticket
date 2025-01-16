@@ -103,9 +103,9 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
       text-align: left;
     }
     .movie-info h1 {
-      font-size: 22px;
-      margin-bottom: 10px;
-      color: #ffffff;
+      font-size: 25px;
+      margin-bottom: 15px;
+      color:black;
     }
     .movie-info p {
       font-size: 16px;

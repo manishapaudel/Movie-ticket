@@ -1,5 +1,4 @@
 <style>
- /* General Reset */
 /* General Reset */
 * {
   margin: 0;
@@ -16,7 +15,7 @@ body {
 /* Header Section */
 .header {
   background: #ffffff;
-  padding: 10px 1rem; /* Reduce padding for smaller header height */
+  padding: 10px 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,6 +24,7 @@ body {
   top: 0;
   z-index: 1000;
 }
+
 .logo img {
   height: 40px;
   width: auto;
@@ -71,14 +71,14 @@ body {
   border-radius: 4px;
   overflow: hidden;
   z-index: 10;
-  padding: 5px 0; /* Reduce top and bottom padding for a smaller box */
+  padding: 5px 0;
 }
 
 .dropdown-content a {
   color: #333;
-  padding: 8px 12px; /* Adjust padding to reduce height */
+  padding: 8px 12px;
   text-decoration: none;
-  font-size: 16px; /* Smaller font for compact design */
+  font-size: 16px;
   display: block;
   transition: background-color 0.3s ease;
 }
@@ -89,7 +89,7 @@ body {
 
 /* Search Bar */
 .search {
-  display: flex; /* Align the input and search icon */
+  display: flex;
   align-items: center;
   position: relative;
 }
@@ -117,15 +117,14 @@ body {
 }
 
 /* Login Button */
-
 .user-actions {
-  display: flex; /* Use flexbox to align items side by side */
-  align-items: center; /* Align items vertically */
-  gap: 10px; /* Add spacing between the search bar and button */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .btn-login {
-  margin-left: 10px; /* Add spacing from the search bar */
+  margin-left: 10px;
   background: #007BFF;
   color: white;
   padding: 8px 20px;
@@ -134,7 +133,6 @@ body {
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s;
-  white-space: nowrap; /* Prevent text from breaking to a new line */
 }
 
 .user-actions .btn-login a {
@@ -177,56 +175,52 @@ body {
     gap: 10px;
   }
 }
-
-
 </style>
 
-</head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <img src="phoenix.png" alt="Phoenix Logo">
-        </div>
+<header class="header">
+  <div class="logo">
+    <img src="phoenix.png" alt="Phoenix Logo">
+  </div>
 
-        <div class="nav">
-            <a href="#">Home</a>
+  <div class="nav">
+    <a href="index.php">Home</a>
 
-            <div class="dropdown">
-                <a href="#">Show Timings</a>
-                <div class="dropdown-content">
-                    <a href="#">Morning Shows</a>
-                    <a href="#">Afternoon Shows</a>
-                    <a href="#">Evening Shows</a>
-                    <a href="#">Late Shows</a>
-                </div>
-            </div>
+    <div class="dropdown">
+      <a href="showtimings.php">Show Timings</a>
+      <div class="dropdown-content">
+        <a href="showtimings.php#morning">Morning Shows</a>
+        <a href="showtimings.php#afternoon">Afternoon Shows</a>
+        <a href="showtimings.php#evening">Evening Shows</a>
+        <a href="showtimings.php#late">Late Shows</a>
+      </div>
+    </div>
 
-            <div class="dropdown">
-                <a href="#">More</a>
-                <div class="dropdown-content">
-                    <a href="contact.html">Contact</a>
-                    <a href="about-us.html">About Us</a>
-                    <a href="faq.html">FAQ</a>
-                    <a href="terms.html">Terms & Conditions</a>
-                </div>
-            </div>
-        </div>
+    <div class="dropdown">
+      <a href="more.php">More</a>
+      <div class="dropdown-content">
+        <a href="contact.php">Contact</a>
+        <a href="about-us.php">About Us</a>
+        <a href="faq.php">FAQ</a>
+        <a href="terms.php">Terms & Conditions</a>
+      </div>
+    </div>
+  </div>
 
-        <div class="user-actions">
-            <div class="search">
-                <i class="bi bi-search"></i>
-                <input type="text" placeholder="Search...">
-            </div>
+  <div class="user-actions">
+    <div class="search">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search...">
+    </div>
 
-            <?php if (isset($_SESSION['email'])): ?>
-                <div class="user-info">
-                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: #007BFF;"></i>
-                    <span>Welcome, <?= htmlspecialchars($_SESSION['email']) ?></span>
-                </div>
-            <?php else: ?>
-                <button class="btn-login">
-                    <a href="login.php">Login</a>
-                </button>
-            <?php endif; ?>
-        </div>
-    </header>
+    <?php if (isset($_SESSION['email'])): ?>
+      <div class="user-info">
+        <i class="bi bi-person-circle" style="font-size: 1.5rem; color: #007BFF;"></i>
+        <span>Welcome, <?= htmlspecialchars($_SESSION['email']) ?></span>
+      </div>
+    <?php else: ?>
+      <button class="btn-login">
+        <a href="login.php">Login</a>
+      </button>
+    <?php endif; ?>
+  </div>
+</header>
