@@ -1,50 +1,3 @@
-<<<<<<< HEAD
-=======
-<?php
-session_start();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Include the database configuration
-    include 'config.php';
-
-    try {
-        // Check if email and password are provided
-        if (!isset($_POST['email']) || empty(trim($_POST['email'])) || 
-            !isset($_POST['password']) || empty(trim($_POST['password']))) {
-            throw new Exception("Email and password are required.");
-        }
-
-        // Sanitize and validate the input
-        $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-        $password = trim($_POST['password']);
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Invalid email format.");
-        }
-
-        // Prepare the SQL statement to prevent SQL injection
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Check if the user exists and the password matches
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            $successMessage = "Login successful! Welcome, " . htmlspecialchars($user['email']);
-        } else {
-            $errorMessage = "Invalid email or password.";
-        }
-    } catch (PDOException $e) {
-        $errorMessage = "Database error: " . $e->getMessage();
-    } catch (Exception $e) {
-        $errorMessage = $e->getMessage();
-    }
-}
-?>
-
->>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             align-items: center;
             height: 100vh;
             color: #333;
+            padding: 1rem;
         }
 
         .container {
@@ -92,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         h1 {
             font-size: 2rem;
-            color: #fff;
+            color: #2575fc;
             margin-bottom: 1rem;
         }
 
@@ -100,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: block;
             margin: 0.5rem 0 0.2rem;
             font-weight: bold;
-            color: #fff;
+            color: #333;
             text-align: left;
         }
 
@@ -108,15 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1rem;
-<<<<<<< HEAD
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-=======
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
->>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
         }
 
         input:focus {
@@ -139,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: none;
             cursor: pointer;
             transition: background 0.3s;
+            margin-bottom: 1rem;
         }
 
         .btn:hover {
@@ -162,14 +111,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .link:hover {
             text-decoration: underline;
         }
-<<<<<<< HEAD
+
         .password-container {
             position: relative;
             margin-bottom: 1rem;
         }
+
         .password-container input {
             padding-right: 2.5rem;
         }
+
         .toggle-password {
             position: absolute;
             top: 50%;
@@ -177,8 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transform: translateY(-50%);
             cursor: pointer;
             font-size: 1rem;
-            color: #007BFF;
-=======
+            color: #2575fc;
+        }
 
         .error {
             color: #ff4d4d;
@@ -188,14 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .success {
             color: #28a745;
             margin-bottom: 1rem;
->>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
             .container {
                 width: 100%;
             }
@@ -203,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         @media (prefers-color-scheme: dark) {
             body {
-                background: linear-gradient(blue, pink);
+                background: linear-gradient(135deg, #1e1e2f, #343459);
                 color: #f5f5f5;
             }
 
@@ -237,43 +183,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h1>Login</h1>
-<<<<<<< HEAD
-        <form method="POST" action="login.php">
-            <label for="email">Email:</label>
-            <input type="email" name="email" required>
 
-            <label for="password">Password:</label>
-            <div class="password-container">
-                <input type="password" name="password" id="password" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
-            </div>
-
-            <button type="submit" class="btn">Login</button>
-        </form>
-        <a href="registration.php" class="link">Don't have an account? Register here</a><br>
-        <a href="admin_login.php" class="link">Login as Admin</a>
-=======
         <?php if (isset($successMessage)): ?>
-            <div class="success"><?= htmlspecialchars($successMessage) ?></div>
+            <div class="success"> <?= htmlspecialchars($successMessage) ?> </div>
             <a href="index.php" class="btn">Go to Dashboard</a>
         <?php else: ?>
             <?php if (isset($errorMessage)): ?>
-                <div class="error"><?= htmlspecialchars($errorMessage) ?></div>
+                <div class="error"> <?= htmlspecialchars($errorMessage) ?> </div>
             <?php endif; ?>
-            <form method="POST" action="">
+
+            <form method="POST" action="login.php">
                 <label for="email">Email:</label>
-                <input type="email" name="email" placeholder="Enter Email" required>
+                <input type="email" name="email" id="email" placeholder="Enter Email" required>
+
                 <label for="password">Password:</label>
-                <input type="password" name="password" placeholder="Enter Password" required>
+                <div class="password-container">
+                    <input type="password" name="password" id="password" placeholder="Enter Password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                </div>
+
                 <button type="submit" class="btn">Login</button>
             </form>
+
+            <a href="admin_login.php" class="btn">Login as Admin</a>
+
             <div class="link-container">
                 <a href="registration.php" class="link">Don't have an account? Register here</a>
-                <a href="admin_login.php" class="link">Login as Admin</a>
-                <a href="index.php" style="color: #007bff; justify-content: center; text-decoration: none;">← Back to Home</a>
+                <a href="index.php" class="link">Back to Home</a>
             </div>
         <?php endif; ?>
->>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
     </div>
 
     <script>
