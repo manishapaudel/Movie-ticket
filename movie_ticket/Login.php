@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 <?php
 session_start();
 
@@ -108,15 +107,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1rem;
-<<<<<<< HEAD
+
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
-=======
+
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
->>>>>>> 1475f07972649bb064dce3b5850f6171188fdbc1
+
         }
 
         input:focus {
