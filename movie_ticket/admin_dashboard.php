@@ -119,8 +119,9 @@ $bookings = $bookingsStmt->fetchAll();
                             <td><?php echo htmlspecialchars($movie['title']); ?></td>
                             <td><?php echo htmlspecialchars($movie['genre']); ?></td>
                             <td><?php echo htmlspecialchars($movie['duration']); ?> mins</td>
+
                             <td><?php echo htmlspecialchars($movie['description']); ?></td>
-                            <td><img src="path/to/posters/<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster" width="50"></td>
+                            <td><img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster" width="50"></td>
                             <td>
                                 <a href="edit_movie.php?id=<?php echo $movie['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="delete_movie.php?id=<?php echo $movie['id']; ?>" class="btn btn-danger btn-sm">Delete</a>

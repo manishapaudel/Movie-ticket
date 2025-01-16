@@ -5,17 +5,11 @@ if (!isset($_SESSION['admin_id'])) {
     exit;
 }
 
-// Database connection
-$conn = new PDO("mysql:host=localhost;dbname=cinemas", "root", "");
+include 'config.php'; // Include the database connection
 
-// Initialize messages
 $error = '';
 $success = '';
 
-// Define genres manually or fetch them dynamically if still needed
-$genres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
-
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $genre = $_POST['genre'];
@@ -37,7 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "File size exceeds 2MB.";
         } else {
             $posterNewName = uniqid() . "." . $posterExt;
-            move_uploaded_file($posterTmpName, "uploads/" . $posterNewName);
+            $posterPath = "uploads/" . $posterNewName;
+
+            if (move_uploaded_file($posterTmpName, $posterPath)) {
+                // Upload successful
+            } else {
+                $error = "Failed to upload poster.";
+            }
         }
     }
 
@@ -45,12 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($title) || empty($genre) || empty($duration)) {
             $error = "Title, genre, and duration are required.";
         } else {
-            // Insert movie data into the database
             try {
+                // Insert movie data into the database
                 $stmt = $conn->prepare(
                     "INSERT INTO movies (title, genre, duration, description, poster) VALUES (?, ?, ?, ?, ?)"
                 );
-                $stmt->execute([$title, $genre, $duration, $description, $posterNewName]);
+                $stmt->execute([$title, $genre, $duration, $description, $posterPath]);
                 $success = "Movie added successfully!";
             } catch (PDOException $e) {
                 $error = "Error adding movie: " . htmlspecialchars($e->getMessage());
@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -177,66 +178,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-light">
-                <div class="card-body">
-                    <h1 class="text-center text-primary mb-4">Add New Movie</h1>
-
-                    <!-- Form for adding movie -->
-                    <form method="POST" action="" enctype="multipart/form-data" id="addMovieForm">
-                        <!-- Display messages -->
-                        <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger"><?= $error; ?></div>
-                        <?php endif; ?>
-                        <?php if (!empty($success)): ?>
-                            <div class="alert alert-success"><?= $success; ?></div>
-                        <?php endif; ?>
-                        
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Movie Title</label>
-                            <input type="text" id="title" name="title" class="form-control" placeholder="Enter movie title" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="genre" class="form-label">Genre</label>
-                            <select id="genre" name="genre" class="form-select" required>
-                                <option value="">-- Select Genre --</option>
-                                <?php foreach ($genres as $genre): ?>
-                                    <option value="<?= htmlspecialchars($genre); ?>"><?= htmlspecialchars($genre); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="duration" class="form-label">Duration (in minutes)</label>
-                            <input type="number" id="duration" name="duration" class="form-control" min="1" placeholder="Enter movie duration" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea id="description" name="description" class="form-control"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="poster" class="form-label">Movie Poster</label>
-                            <input type="file" id="poster" name="poster" class="form-control" accept="image/*" required>
-                            <small class="form-text text-muted">Allowed formats: JPG, JPEG, PNG. Max size: 2MB.</small>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Add Movie</button>
-                    </form>
-
-                    <div class="text-center mt-3">
-                        <a href="admin_dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Form for adding movie -->
+<form method="POST" action="add_movie.php" enctype="multipart/form-data">
+    <?php if (!empty($error)): ?>
+        <div class="alert alert-danger"><?= $error; ?></div>
+    <?php endif; ?>
+    <?php if (!empty($success)): ?>
+        <div class="alert alert-success"><?= $success; ?></div>
+    <?php endif; ?>
+    
+    <div class="mb-3">
+        <label for="title">Movie Title</label>
+        <input type="text" id="title" name="title" required>
     </div>
-</div>
-
-<!-- Include Toastr JS for notifications -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/toastr/build/toastr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="mb-3">
+        <label for="genre">Genre</label>
+        <select id="genre" name="genre" required>
+            <option value="">-- Select Genre --</option>
+            <option value="Action">Action</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Drama">Drama</option>
+            <option value="Horror">Horror</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="duration">Duration (in minutes)</label>
+        <input type="number" id="duration" name="duration" min="1" required>
+    </div>
+    <div class="mb-3">
+        <label for="description">Description</label>
+        <textarea id="description" name="description"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="poster">Movie Poster</label>
+        <input type="file" id="poster" name="poster" accept="image/*" required>
+    </div>
+    <button type="submit">Add Movie</button>
+</form>
 
 </body>
+          
 </html>

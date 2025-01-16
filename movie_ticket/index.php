@@ -1,4 +1,26 @@
+
+<?php
+// Establish the connection
+$conn = new PDO("mysql:host=localhost;dbname=mydb", "root", "");
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Query to fetch movies added by the admin
+$sql = "SELECT * FROM movies WHERE added_by = :admin_id ORDER BY created_at DESC";
+$stmt = $conn->prepare($sql); // Use $conn here instead of $pdo
+$stmt->execute(['admin_id' => 1]); // Assuming the admin's user ID is 1
+
+$movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Phoenix Cinemas - Movie Booking</title>
+  <style>
+    
   <style>
     /* Global Styles */
     body {
@@ -112,6 +134,7 @@
       color: #111;
     }
   </style>
+  </style>
 </head>
 <body>
 
@@ -119,48 +142,38 @@
 
 <!-- Preview Section Header -->
 <div class="section-header">Preview</div>
-
 <section class="hero-section">
-  <!-- Hero Carousel -->
   <div class="hero-carousel" id="hero-carousel">
+    <?php foreach ($movies as $movie): ?>
     <div class="hero-slide">
-      <img src="Img/venom2.webp" alt="Venom - Let There Be Carnage">
-      <div class="movie-info">
-        <h1>Venom - Let There Be Carnage</h1>
-        <p>U/A • 2h 38m • Friday, Nov 1, 2024 • Action, Sci-fi • English, Hindi</p>
-        <p>Eddie Brock tries to revive his failing career by interviewing a serial killer, Cletus Kasady, who is on death row.</p>
+    <img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
+    <div class="movie-info">
+        <h1><?php echo htmlspecialchars($movie['title']); ?></h1>
+        <p>
+          <?php echo htmlspecialchars($movie['duration']); ?> • 
+          <?php 
+          // Validate release_date field
+          echo isset($movie['release_date']) && $movie['release_date'] !== null
+            ? date('l, M d, Y', strtotime($movie['release_date']))
+            : "Unknown Release Date"; 
+          ?> • 
+          <?php 
+          // Validate genre field
+          echo isset($movie['genre']) ? htmlspecialchars($movie['genre']) : "Unknown Genre"; 
+          ?> • 
+          <?php 
+          // Validate language field
+          echo isset($movie['language']) ? htmlspecialchars($movie['language']) : "Unknown Language"; 
+          ?>
+        </p>
+        <p><?php echo nl2br(htmlspecialchars($movie['description'])); ?></p>
         <button onclick="window.location.href='seat_selection.php'">Book Now</button>
       </div>
     </div>
-    <div class="hero-slide">
-      <img src="Img/aquaman.jpg" alt="Aquaman">
-      <div class="movie-info">
-        <h1>Aquaman</h1>
-        <p>U/A • 2h 30m • Sunday, Dec 1, 2024 • Action, Adventure • English, Hindi</p>
-        <p>Arthur Curry, the human-born heir to the underwater kingdom of Atlantis, goes on a quest to prevent a war between the worlds of ocean and land.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
-      </div>
-    </div>
-    <div class="hero-slide">
-      <img src="Img/kgf.jpg" alt="Kgf">
-      <div class="movie-info">
-        <h1>Kgf</h1>
-        <p>U/A • 2h 34m • Sunday, Dec 1, 2024 • Action, Adventure • Telugu, Hindi</p>
-        <p>In the 1970s, a gangster named Rocky goes undercover as a slave to assassinate the owner of a notorious gold mine known as the Kolar Gold Fields.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
-      </div>
-    </div>
-    <div class="hero-slide">
-      <img src="Img/aladdin.jpg" alt="Aladdin">
-      <div class="movie-info">
-        <h1>Aladdin</h1>
-        <p>U/A • 2h 10m • Saturday, Nov 30, 2024 • Fantasy, Romance • English, Hindi</p>
-        <p>Aladdin is a lovable street urchin who stumbles upon a magic oil lamp that unleashes a powerful, wisecracking genie.</p>
-        <button onclick="window.location.href='seat_selection.php'">Book Now</button>
-      </div>
-    </div>
+    <?php endforeach; ?>
   </div>
 </section>
+
 
 <?php include 'quick_book.php'; ?>
 <?php include 'now_showing.php'; ?>
@@ -170,6 +183,7 @@
 </footer>
 
 <script>
+  <script>
 const carousel = document.getElementById('hero-carousel');
 const slides = carousel.children;
 let currentIndex = 0;
@@ -181,5 +195,9 @@ function showNextSlide() {
 
 setInterval(showNextSlide, 5000); // Slide changes every 5 seconds
 </script>
+</script>
+
+</body>
+</html>
 
 
