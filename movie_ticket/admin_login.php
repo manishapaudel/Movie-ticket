@@ -12,20 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$email]);
     $admin = $stmt->fetch();
 
-    if ($admin) {
-        if (password_verify($password, $admin["password"])) {
-            // Set session and redirect to admin dashboard
-            $_SESSION['admin_id'] = $admin['id'];
-            header("Location: admin_dashboard.php");
-            exit;
-        } else {
-            $error = 'Password does not match.';
-        }
+    if (password_verify($password, $admin["password"])) {
+        // Set session and redirect to admin dashboard
+        $_SESSION['admin_id'] = $admin['id'];
+        header("Location: admin_dashboard.php");
+        exit;
     } else {
-        $error = 'No email address found.';
+        $error = 'Password does not match.';
     }
 }
-?>
+?>  <!-- This was missing -->
 
 <!DOCTYPE html>
 <html lang="en">
