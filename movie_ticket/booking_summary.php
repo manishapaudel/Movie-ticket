@@ -100,9 +100,11 @@
       cursor: pointer;
       font-size: 16px;
       transition: background 0.3s ease;
+      margin:10px;
     }
     .booking-summary button:hover {
       background: #16a34a;
+      transform: scale(1.05);
     }
 
     /* Khalti Payment Button */
@@ -128,7 +130,7 @@
     }
     .khalti-button img {
       margin-right: 10px;
-      width: 25px;
+      width: 30px;
       height: 25px;
     }
 
@@ -185,7 +187,7 @@
       <input type="hidden" id="totalPriceInput" name="totalPrice">
  <!-- Khalti Payment Button -->
     <button class="khalti-button" id="khaltiPaymentBtn">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Khalti_logo.svg/640px-Khalti_logo.svg.png" alt="Khalti Logo">
+      <img src="khalti.jpg" alt="Khalti Logo">
       Pay with Khalti
     </button>
       <button type="submit">Confirm Booking</button>
