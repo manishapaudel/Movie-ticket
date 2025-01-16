@@ -221,10 +221,10 @@
 
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.textContent = '🙈';
+                toggleIcon.innerHTML = '&#128584;';
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.textContent = '👁️';
+                toggleIcon.innerHTML = '&#128065;';
             }
         }
     </script>
