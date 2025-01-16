@@ -227,6 +227,12 @@
                 toggleIcon.innerHTML = '&#128065;';
             }
         }
+        
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent actual form submission
+        window.location.href = 'index.php'; // Redirect to index.php
+    });
+
     </script>
 </body>
 </html>

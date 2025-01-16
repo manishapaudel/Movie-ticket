@@ -141,39 +141,7 @@
   <h1>Seat Booking System</h1>
 
   <div class="seat-container" id="seatContainer">
-    <?php
-    include 'config.php'; // Ensure this file initializes a PDO connection in the variable $conn
-
-    try {
-        // Fetch seat data from the database
-        $sql = "SELECT * FROM seats";
-        $stmt = $conn->prepare($sql); // Use PDO's prepare statement
-        $stmt->execute();
-    
-        // Fetch all rows as an associative array
-        $seatsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-        if (!$seatsData) {
-            echo "No seats data found.";
-        }
-    } catch (PDOException $e) {
-        echo "Error fetching seat data: " . $e->getMessage();
-    }
-    
-    $rows = ['A', 'B'];
-    foreach ($rows as $row) {
-        echo '<div class="seats-row">';
-        foreach ($seatsData as $seat) {
-            if (strpos($seat['number'], $row) === 0) {
-                $class = $seat['status'] === 'available' ? 'available' : 'occupied';
-                echo "<div class='seat $class' data-id='{$seat['id']}' data-price='{$seat['price']}'>
-                        {$seat['number']}
-                      </div>";
-            }
-        }
-        echo '</div>';
-    }
-    ?>
+    <!-- Seats will be dynamically loaded here -->
   </div>
 
   <div class="booking-summary">
@@ -185,15 +153,13 @@
       <input type="date" id="bookingDate" name="bookingDate" required>
       <input type="hidden" id="selectedSeatsInput" name="selectedSeats">
       <input type="hidden" id="totalPriceInput" name="totalPrice">
- <!-- Khalti Payment Button -->
-    <button class="khalti-button" id="khaltiPaymentBtn">
-      <img src="khalti.jpg" alt="Khalti Logo">
-      Pay with Khalti
-    </button>
+      <!-- Khalti Payment Button -->
+      <button class="khalti-button" id="khaltiPaymentBtn">
+        <img src="khalti.jpg" alt="Khalti Logo">
+        Pay with Khalti
+      </button>
       <button type="submit">Confirm Booking</button>
     </form>
-
-   
   </div>
 
   <script src="https://khalti.com/static/khalti-checkout.js"></script>
@@ -201,23 +167,50 @@
     let selectedSeats = [];
     let totalPrice = 0;
 
-    document.querySelectorAll('.seat.available').forEach(seat => {
-      seat.addEventListener('click', () => {
-        const seatId = parseInt(seat.dataset.id);
-        const price = parseInt(seat.dataset.price);
-
-        seat.classList.toggle('selected');
-        if (seat.classList.contains('selected')) {
-          selectedSeats.push(seatId);
-          totalPrice += price;
+    // Fetch seat data from seat_selection.php
+    fetch('seat_selection.php')
+      .then(response => response.json())
+      .then(seatsData => {
+        if (seatsData.length === 0) {
+          alert("No seats data found.");
         } else {
-          selectedSeats = selectedSeats.filter(id => id !== seatId);
-          totalPrice -= price;
+          // Dynamically create seat rows
+          const seatContainer = document.getElementById("seatContainer");
+          const rows = ['A', 'B']; // Assuming rows A and B
+          rows.forEach(row => {
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("seats-row");
+            seatsData.forEach(seat => {
+              if (seat.number.startsWith(row)) {
+                const seatDiv = document.createElement("div");
+                seatDiv.classList.add('seat', seat.status === 'available' ? 'available' : 'occupied');
+                seatDiv.dataset.id = seat.id;
+                seatDiv.dataset.price = seat.price;
+                seatDiv.textContent = seat.number;
+                seatDiv.addEventListener('click', () => {
+                  if (seatDiv.classList.contains('available')) {
+                    seatDiv.classList.toggle('selected');
+                    if (seatDiv.classList.contains('selected')) {
+                      selectedSeats.push(seat.id);
+                      totalPrice += seat.price;
+                    } else {
+                      selectedSeats = selectedSeats.filter(id => id !== seat.id);
+                      totalPrice -= seat.price;
+                    }
+                    updateSummary();
+                  }
+                });
+                rowDiv.appendChild(seatDiv);
+              }
+            });
+            seatContainer.appendChild(rowDiv);
+          });
         }
-
-        updateSummary();
+      })
+      .catch(error => {
+        console.error("Error fetching seat data:", error);
+        alert("An error occurred while loading seats.");
       });
-    });
 
     function updateSummary() {
       document.getElementById("selectedSeatsText").textContent =
@@ -235,15 +228,14 @@
       eventHandler: {
         onSuccess(payload) {
           console.log("Payment successful", payload);
-
           // Send payment details to the server
           fetch("process_payment.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           })
-            .then((response) => response.json())
-            .then((data) => {
+            .then(response => response.json())
+            .then(data => {
               if (data.success) {
                 alert("Payment successful!");
                 window.location.href = "booking_confirmation.php"; // Redirect to confirmation
@@ -251,7 +243,7 @@
                 alert("Payment verification failed!");
               }
             })
-            .catch((error) => {
+            .catch(error => {
               console.error("Payment error:", error);
               alert("An error occurred while processing the payment.");
             });

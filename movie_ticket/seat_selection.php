@@ -253,105 +253,114 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const seatsData = {
-            classic: { rows: ['M', 'L', 'K', 'J', 'I', 'H'], cols: 14 },
-            club: { rows: ['F', 'E', 'D', 'C', 'B'], cols: 18 },
-            recliner: { rows: ['A'], cols: 10 },
-        };
+    const seatsData = {
+        classic: { rows: ['M', 'L', 'K', 'J', 'I', 'H'], cols: 14 },
+        club: { rows: ['F', 'E', 'D', 'C', 'B'], cols: 18 },
+        recliner: { rows: ['A'], cols: 10 },
+    };
 
-        const seatContainerIds = {
-            classic: "#classic-seats",
-            club: "#club-seats",
-            recliner: "#recliner-seats",
-        };
+    const seatContainerIds = {
+        classic: "#classic-seats",
+        club: "#club-seats",
+        recliner: "#recliner-seats",
+    };
 
-        const renderSeats = (type) => {
-            const container = document.querySelector(seatContainerIds[type]);
-            const { rows, cols } = seatsData[type];
-            rows.forEach((row) => {
-                const rowDiv = document.createElement("div");
-                rowDiv.classList.add("seat-row");
-                const rowLabel = document.createElement("span");
-                rowLabel.classList.add("row-label");
-                rowLabel.textContent = row;
-                rowDiv.appendChild(rowLabel);
+    const renderSeats = (type) => {
+        const container = document.querySelector(seatContainerIds[type]);
+        const { rows, cols } = seatsData[type];
+        rows.forEach((row) => {
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("seat-row");
+            const rowLabel = document.createElement("span");
+            rowLabel.classList.add("row-label");
+            rowLabel.textContent = row;
+            rowDiv.appendChild(rowLabel);
 
-                for (let i = 1; i <= cols; i++) {
-                    const seatDiv = document.createElement("div");
-                    seatDiv.classList.add("seat");
-                    if (type === "recliner") seatDiv.classList.add("recliner");
-                    seatDiv.textContent = i;
-                    rowDiv.appendChild(seatDiv);
-                }
+            for (let i = 1; i <= cols; i++) {
+                const seatDiv = document.createElement("div");
+                seatDiv.classList.add("seat");
+                if (type === "recliner") seatDiv.classList.add("recliner");
+                seatDiv.textContent = i;
+                rowDiv.appendChild(seatDiv);
+            }
 
-                container.appendChild(rowDiv);
-            });
-        };
-
-        Object.keys(seatsData).forEach(renderSeats);
-
-        const seats = document.querySelectorAll(".seat");
-        const modal = document.getElementById("confirmation-modal");
-        const overlay = document.getElementById("overlay");
-        const confirmButton = document.getElementById("confirm-selection");
-        const cancelButton = document.getElementById("cancel-selection");
-
-
-
-        
-        let selectedSeats = [];
-
-        const toggleModal = (visible) => {
-            modal.classList.toggle("visible", visible);
-            overlay.classList.toggle("visible", visible);
-        };
-
-        const updateTotal = () => {
-            const totalElement = document.querySelector("#total-price") || document.createElement("div");
-            totalElement.id = "total-price";
-            totalElement.style.marginTop = "20px";
-            totalElement.style.textAlign = "center";
-            totalElement.style.fontWeight = "bold";
-            const total = selectedSeats.reduce((sum, seat) => sum + (seat.type === "recliner" ? 750 : 450), 0);
-            totalElement.textContent = `Total: ₹${total}`;
-            document.querySelector(".seat-layout").appendChild(totalElement);
-        };
-
-        seats.forEach((seat) => {
-            seat.addEventListener("click", () => {
-                if (seat.classList.contains("occupied")) return;
-                seat.classList.toggle("selected");
-                const seatData = { row: seat.parentNode.querySelector(".row-label").textContent, number: seat.textContent, type: seat.classList.contains("recliner") ? "recliner" : "classic" };
-
-                if (seat.classList.contains("selected")) {
-                    selectedSeats.push(seatData);
-                } else {
-                    selectedSeats = selectedSeats.filter((s) => !(s.row === seatData.row && s.number === seatData.number));
-                }
-
-                updateTotal();
-            });
+            container.appendChild(rowDiv);
         });
+    };
 
-        openModalButton.addEventListener("click", () => {
-        if (selectedSeats.length > 0) {
-            toggleModal(true);
-        } else {
-            alert("Please select at least one seat.");
-        }
-    });
+    Object.keys(seatsData).forEach(renderSeats);
 
-        confirmButton.addEventListener("click", () => {
-            console.log("Selected Seats: ", selectedSeats);
-            toggleModal(false);
-        });
+    const seats = document.querySelectorAll(".seat");
+    const modal = document.getElementById("confirmation-modal");
+    const overlay = document.getElementById("overlay");
+    const confirmButton = document.getElementById("confirm-selection");
+    const cancelButton = document.getElementById("cancel-selection");
 
-        cancelButton.addEventListener("click", () => {
-            toggleModal(false);
-        });
+    let selectedSeats = [];
 
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") toggleModal(false);
+    const toggleModal = (visible) => {
+        modal.classList.toggle("visible", visible);
+        overlay.classList.toggle("visible", visible);
+    };
+
+    const updateTotal = () => {
+        const totalElement = document.querySelector("#total-price") || document.createElement("div");
+        totalElement.id = "total-price";
+        totalElement.style.marginTop = "20px";
+        totalElement.style.textAlign = "center";
+        totalElement.style.fontWeight = "bold";
+        const total = selectedSeats.reduce((sum, seat) => sum + (seat.type === "recliner" ? 750 : 450), 0);
+        totalElement.textContent = `Total: ₹${total}`;
+        document.querySelector(".seat-layout").appendChild(totalElement);
+    };
+
+    seats.forEach((seat) => {
+        seat.addEventListener("click", () => {
+            if (seat.classList.contains("occupied")) return;
+            seat.classList.toggle("selected");
+            const seatData = { row: seat.parentNode.querySelector(".row-label").textContent, number: seat.textContent, type: seat.classList.contains("recliner") ? "recliner" : "classic" };
+
+            if (seat.classList.contains("selected")) {
+                selectedSeats.push(seatData);
+            } else {
+                selectedSeats = selectedSeats.filter((s) => !(s.row === seatData.row && s.number === seatData.number));
+            }
+
+            updateTotal();
         });
     });
+
+    confirmButton.addEventListener("click", () => {
+        console.log("Selected Seats: ", selectedSeats);
+        // Send the selected seats to the server to save in the database
+        fetch("save_seats.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ selectedSeats })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toggleModal(false);
+                alert("Seats booked successfully!");
+                window.location.href = "booking_summary.php";  // Redirect to booking confirmation page
+            } else {
+                alert("Failed to save seats. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("There was an error saving your seat selection.");
+        });
+    });
+
+    cancelButton.addEventListener("click", () => {
+        toggleModal(false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") toggleModal(false);
+    });
+});
+
 </script>
