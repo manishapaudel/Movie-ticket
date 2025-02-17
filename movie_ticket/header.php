@@ -177,6 +177,7 @@ body {
 }
 </style>
 
+
 <header class="header">
   <div class="logo">
     <img src="phoenix.png" alt="Phoenix Logo">
@@ -207,9 +208,11 @@ body {
   </div>
 
   <div class="user-actions">
-    <div class="search">
-      <i class="bi bi-search"></i>
-      <input type="text" placeholder="Search...">
+  <div class="search">
+        <form action="search_results.php" method="GET">
+            <input type="text" name="query" id="search-input" placeholder="Search for movies..." required>
+            <button type="submit" id="search-button">Search</button>
+        </form>
     </div>
 
     <?php if (isset($_SESSION['email'])): ?>
@@ -224,3 +227,6 @@ body {
     <?php endif; ?>
   </div>
 </header>
+
+
+

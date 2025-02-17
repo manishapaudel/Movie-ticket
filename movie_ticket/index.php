@@ -140,6 +140,9 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <?php include 'header.php'; ?>
 
+
+
+
 <!-- Preview Section Header -->
 <div class="section-header">Preview</div>
 <section class="hero-section">
@@ -175,7 +178,7 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </section>
 
 
-<?php include 'quick_book.php'; ?>
+
 <?php include 'now_showing.php'; ?>
 
 <footer>
