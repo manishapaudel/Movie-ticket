@@ -1,9 +1,9 @@
 <?php
-session_start();
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: admin_login.php");
-    exit;
-}
+// session_start();
+// if (!isset($_SESSION['admin_id'])) {
+//     header("Location: admin_login.php");
+//     exit();
+// }
 
 include 'config.php'; // Include the database connection
 
@@ -46,20 +46,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Title, genre, and duration are required.";
         } else {
             try {
-                // Insert movie data into the database
-                $stmt = $conn->prepare(
-                    "INSERT INTO movies (title, genre, duration, description, poster) VALUES (?, ?, ?, ?, ?)"
-                );
-                $stmt->execute([$title, $genre, $duration, $description, $posterPath]);
-                $success = "Movie added successfully!";
-            } catch (PDOException $e) {
+                // Prepare the SQL statement using MySQLi
+                $stmt = $conn->prepare("INSERT INTO movies (title, genre, duration, description, poster) VALUES (?, ?, ?, ?, ?)");
+
+                // Bind parameters (s = string, i = integer)
+                $stmt->bind_param("ssiss", $title, $genre, $duration, $description, $posterPath);
+
+                // Execute the statement
+                if ($stmt->execute()) {
+                    $success = "Movie added successfully!";
+                    // Redirect to admin dashboard after success
+                    header("Location: admin_dashboard.php");
+                    exit();
+                } else {
+                    $error = "Error adding movie: " . $stmt->error;
+                }
+
+                // Close the statement
+                $stmt->close();
+            } catch (Exception $e) {
                 $error = "Error adding movie: " . htmlspecialchars($e->getMessage());
             }
         }
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,93 +97,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
     </script>
     <style>
-        /* Custom Styles */
         body {
-            background: linear-gradient(pink, pink, blue, blue);
-            animation: gradientBG 10s ease infinite;
             font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        .card {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-            background: #111;
+        .container {
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .form-label {
-            color: #fff;  /* Changed to white color */
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
 
-        .card-body {
-            padding: 2rem;
-        }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2d87f0;
-        }
-
-        .btn-primary {
-            background-color: #2d87f0;
-            border: none;
-            transition: background-color 0.3s;
-        }
-
-        .btn-primary:hover {
-            background-color: #1f6cc7;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            transition: border-color 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: #2d87f0;
-            box-shadow: 0 0 8px rgba(45, 135, 240, 0.5);
-        }
-
-        .form-select {
-            border-radius: 8px;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            transition: border-color 0.3s;
-        }
-
-        .form-select:focus {
-            border-color: #2d87f0;
-            box-shadow: 0 0 8px rgba(45, 135, 240, 0.5);
-        }
-
-        /* More specific selector for the small text with the 'form-text' class */
-        .form-control + .form-text {
-            font-size: 0.875rem;
-            color: #fff !important;  /* Force white color */
-        }
-
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #5a6268;
-        }
-
-        .alert {
-            font-size: 1rem;
-            padding: 15px;
+        .form-group {
             margin-bottom: 15px;
         }
 
-        .text-primary {
-            color: #2d87f0 !important;
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -180,18 +187,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- Form for adding movie -->
 <form method="POST" action="add_movie.php" enctype="multipart/form-data">
+<div class="container">
+    <h2>Add Movie</h2>
+
     <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= $error; ?></div>
     <?php endif; ?>
     <?php if (!empty($success)): ?>
         <div class="alert alert-success"><?= $success; ?></div>
     <?php endif; ?>
-    
-    <div class="mb-3">
+
+    <div class="form-group">
         <label for="title">Movie Title</label>
         <input type="text" id="title" name="title" required>
     </div>
-    <div class="mb-3">
+
+    <div class="form-group">
         <label for="genre">Genre</label>
         <select id="genre" name="genre" required>
             <option value="">-- Select Genre --</option>
@@ -202,21 +213,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="Sci-Fi">Sci-Fi</option>
         </select>
     </div>
-    <div class="mb-3">
+
+    <div class="form-group">
         <label for="duration">Duration (in minutes)</label>
         <input type="number" id="duration" name="duration" min="1" required>
     </div>
-    <div class="mb-3">
+
+    <div class="form-group">
         <label for="description">Description</label>
         <textarea id="description" name="description"></textarea>
     </div>
-    <div class="mb-3">
+
+    <div class="form-group">
         <label for="poster">Movie Poster</label>
         <input type="file" id="poster" name="poster" accept="image/*" required>
     </div>
+
     <button type="submit">Add Movie</button>
+</div>
 </form>
 
 </body>
-          
 </html>

@@ -1,17 +1,15 @@
-
 <?php
-// Establish the connection
+// Establish database connection
 $conn = new PDO("mysql:host=localhost;dbname=mydb", "root", "");
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Query to fetch movies added by the admin
-$sql = "SELECT * FROM movies WHERE added_by = :admin_id ORDER BY created_at DESC";
-$stmt = $conn->prepare($sql); // Use $conn here instead of $pdo
-$stmt->execute(['admin_id' => 1]); // Assuming the admin's user ID is 1
+// Query to fetch movies added by any admin
+$sql = "SELECT * FROM movies ORDER BY created_at DESC";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
 
 $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +17,6 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Phoenix Cinemas - Movie Booking</title>
-  <style>
-    
   <style>
     /* Global Styles */
     body {
@@ -75,25 +71,22 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     .hero-carousel {
       display: flex;
-      flex-wrap: nowrap;
       transition: transform 0.5s ease-in-out;
-      width: 100%; /* Full width for smoother animation */
+      width: 100%;
     }
 
     .hero-slide {
-      flex: 0 0 100%; /* Each slide takes 100% width of the container */
+      flex: 0 0 100%;
       display: flex;
-      flex-direction: row;
       align-items: center;
-      justify-content: space-between; /* Space between image and text */
+      justify-content: space-between;
       padding: 20px;
       box-sizing: border-box;
     }
-    
 
     .hero-slide img {
-      max-width: 30%; /* Restrict image width */
-      height: auto; /* Maintain aspect ratio */
+      max-width: 30%;
+      height: auto;
       border-radius: 10px;
       object-fit: cover;
     }
@@ -105,12 +98,12 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .movie-info h1 {
       font-size: 25px;
       margin-bottom: 15px;
-      color:black;
+      color: black;
     }
     .movie-info p {
       font-size: 16px;
       margin: 5px 0;
-      color: #000; /* Adjusted for better readability */
+      color: #000;
     }
     .movie-info button {
       background: #6a0dad;
@@ -134,14 +127,10 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
       color: #111;
     }
   </style>
-  </style>
 </head>
 <body>
 
 <?php include 'header.php'; ?>
-
-
-
 
 <!-- Preview Section Header -->
 <div class="section-header">Preview</div>
@@ -149,25 +138,13 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="hero-carousel" id="hero-carousel">
     <?php foreach ($movies as $movie): ?>
     <div class="hero-slide">
-    <img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
-    <div class="movie-info">
+      <img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
+      <div class="movie-info">
         <h1><?php echo htmlspecialchars($movie['title']); ?></h1>
         <p>
-          <?php echo htmlspecialchars($movie['duration']); ?> • 
-          <?php 
-          // Validate release_date field
-          echo isset($movie['release_date']) && $movie['release_date'] !== null
-            ? date('l, M d, Y', strtotime($movie['release_date']))
-            : "Unknown Release Date"; 
-          ?> • 
-          <?php 
-          // Validate genre field
-          echo isset($movie['genre']) ? htmlspecialchars($movie['genre']) : "Unknown Genre"; 
-          ?> • 
-          <?php 
-          // Validate language field
-          echo isset($movie['language']) ? htmlspecialchars($movie['language']) : "Unknown Language"; 
-          ?>
+          <?php echo htmlspecialchars($movie['duration']); ?> mins • 
+          <?php echo isset($movie['release_date']) ? date('l, M d, Y', strtotime($movie['release_date'])) : "Unknown Release Date"; ?> • 
+          <?php echo htmlspecialchars($movie['genre']); ?>
         </p>
         <p><?php echo nl2br(htmlspecialchars($movie['description'])); ?></p>
         <button onclick="window.location.href='seat_selection.php'">Book Now</button>
@@ -177,8 +154,6 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </section>
 
-
-
 <?php include 'now_showing.php'; ?>
 
 <footer>
@@ -186,7 +161,6 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </footer>
 
 <script>
-  <script>
 const carousel = document.getElementById('hero-carousel');
 const slides = carousel.children;
 let currentIndex = 0;
@@ -196,11 +170,8 @@ function showNextSlide() {
   carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
 }
 
-setInterval(showNextSlide, 5000); // Slide changes every 5 seconds
-</script>
+setInterval(showNextSlide, 5000);
 </script>
 
 </body>
 </html>
-
-

@@ -4,16 +4,19 @@ include 'config.php';
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    // Delete the movie
+    // First, delete the movie
     $stmt = $conn->prepare("DELETE FROM movies WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt->bind_param("i", $id);
+    
+    if ($stmt->execute()) {
+        // Reset AUTO_INCREMENT only if needed
+        $conn->query("ALTER TABLE movies AUTO_INCREMENT = 1");
 
-    // Update IDs to renumber them
-    $stmt = $conn->query("SET @autoid = 0");
-    $stmt = $conn->query("UPDATE movies SET id = (@autoid := @autoid + 1)");
-    $stmt = $conn->query("ALTER TABLE movies AUTO_INCREMENT = 1");
-
-    header("Location: admin_dashboard.php");
-    exit;
+        // Redirect back to admin dashboard
+        header("Location: admin_dashboard.php?message=Movie Deleted Successfully");
+        exit;
+    } else {
+        echo "Error deleting movie: " . $conn->error;
+    }
 }
 ?>

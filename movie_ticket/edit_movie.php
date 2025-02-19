@@ -9,8 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $stmt = $conn->prepare("SELECT * FROM movies WHERE id = ?");
-    $stmt->execute([$id]);
-    $movie = $stmt->fetch();
+    $stmt->bind_param("i", $id); // "i" means integer
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $movie = $result->fetch_assoc();
 
     if (!$movie) {
         die("Movie not found.");
@@ -26,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
 
     // Handle poster upload
-    $poster = $movie['poster'];
+    $poster = $movie['poster']; // Default to existing poster
     if (isset($_FILES['poster']) && $_FILES['poster']['error'] == UPLOAD_ERR_OK) {
         $targetDir = "uploads/";
         $fileName = uniqid() . basename($_FILES['poster']['name']);
@@ -38,10 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt = $conn->prepare("UPDATE movies SET title = ?, genre = ?, duration = ?, description = ?, poster = ? WHERE id = ?");
-    $stmt->execute([$title, $genre, $duration, $description, $poster, $id]);
+    $stmt->bind_param("ssissi", $title, $genre, $duration, $description, $poster, $id);
 
-    echo "<script>alert('Movie updated successfully!'); window.location.href='admin_dashboard.php';</script>";
-    exit;
+    if ($stmt->execute()) {
+        echo "<script>alert('Movie updated successfully!'); window.location.href='admin_dashboard.php';</script>";
+        exit;
+    } else {
+        echo "Error updating movie: " . $conn->error;
+    }
 }
 ?>
 
@@ -170,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label>Poster</label>
                 <input type="file" name="poster">
-                <?php if ($movie['poster']): ?>
+                <?php if (!empty($movie['poster'])): ?>
                     <img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster">
                 <?php endif; ?>
             </div>
