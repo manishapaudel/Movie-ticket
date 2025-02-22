@@ -49,11 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> ec8dd6099c7efff9b80166131dd0967af59eb205
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,6 +117,7 @@ label {
     text-align: left;
 }
 
+<<<<<<< HEAD
 input {
     width: 100%;
     padding: 0.8rem;
@@ -125,6 +129,19 @@ input {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
+=======
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+>>>>>>> ec8dd6099c7efff9b80166131dd0967af59eb205
 
 }
 
@@ -169,6 +186,7 @@ input:focus {
     font-size: 0.9rem;
 }
 
+<<<<<<< HEAD
 .link:hover {
     text-decoration: underline;
 }
@@ -191,6 +209,12 @@ input:focus {
     font-size: 1rem;
     color: #6a0dad; /* Purple color for the toggle */
 }
+=======
+        .error {
+            color: #ff4d4d;
+            margin-bottom: 1rem;
+        }
+>>>>>>> ec8dd6099c7efff9b80166131dd0967af59eb205
 
 .error {
     color: #ff4d4d;
@@ -245,7 +269,6 @@ input:focus {
 <body>
     <div class="container">
         <h1>Login</h1>
-
         <?php if (isset($successMessage)): ?>
             <div class="success"> <?= htmlspecialchars($successMessage) ?> </div>
             <a href="index.php" class="btn">Go to Dashboard</a>

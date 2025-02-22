@@ -18,7 +18,7 @@
         }
 
         .quick-book-container {
-            background: black;
+            background: #fff;
             color: white;
             padding: 30px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -26,6 +26,12 @@
             max-width: 1600px; /* Maximum width for larger screens */
             text-align: center;
             margin: 0 auto;
+        }
+
+        .quick-book-container h1 {
+            font-size: 2rem;
+            color: #111;
+            margin-bottom: 20px;
         }
 
         .quick-book-container form {
@@ -83,6 +89,7 @@
 </head>
 <body>
     <div class="quick-book-container">
+        <h1>Quick Book</h1>
         <form id="quickBookForm" action="seat_selection.php" method="GET">
             <select name="movie" id="movie" required>
                 <option value="">Movie</option>
