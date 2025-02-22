@@ -1,6 +1,5 @@
 <style>
-    /* Now Showing Section */
-
+/* Now Showing Section */
 .now-showing {
   background: linear-gradient(pink, blue);
   padding: 2rem 0;
@@ -25,25 +24,30 @@
   border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 1rem;
-  height: 100%; /* Ensures cards stretch equally */
+  height: 100%;
   width: 80%;
 }
 
 .movie-card img {
   width: 100%;           /* Full card width */
   height: 300px;         /* Fixed height for all images */
-  object-fit: fit;     /* Centers and crops the image */
+  object-fit: cover;     /* Centers and crops the image */
   border-radius: 10px;   /* Keeps the rounded corner style */
 }
 
 .movie-details {
-  flex-grow: 1; /* Pushes content to align properly */
+  display: flex;
+  flex-direction: column; /* Stack details and button vertically */
+  align-items: flex-start; /* Align content to the left */
   margin-top: 1rem;
+  gap: 10px; /* Add spacing between details and the button */
+}
+
+.movie-details div {
+  flex-grow: 1; /* Ensure the movie details occupy available space */
 }
 
 .movie-details h4 {
@@ -55,16 +59,13 @@
 .movie-details p {
   color: #555;
   font-size: 0.9rem;
-  margin: 0.5rem 0 1rem 0;
-  text-overflow: ellipsis; /* Truncates text if it's too long */
-  overflow: hidden;
-  white-space: nowrap; /* Prevents text wrapping */
+  margin: 0;
+  text-align: left;
 }
 
 .movie-card button.btn-book {
-  margin: 20px; /* Ensures the button is pushed to the bottom */
-  margin-top: auto;
-  padding: 10px 20px;
+  width: auto; /* Keep the button width consistent */
+  padding: 10px 15px;
   background: #111;
   color: white;
   border: none;
@@ -72,10 +73,26 @@
   cursor: pointer;
   transition: background 0.3s ease;
 }
+
 .movie-card button.btn-book:hover {
   background: #6a3fdf;
 }
 
+@media (max-width: 768px) {
+  .movie-card {
+    width: 100%;
+  }
+
+  .movie-details {
+    flex-direction: column;
+    align-items: flex-start; /* Stack content for smaller screens */
+  }
+
+  .movie-card button.btn-book {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
 </style>
 
 <?php
@@ -111,31 +128,29 @@ $now_showing = [
 <section class="now-showing">
     <div class="container">
         <h3>Now Showing</h3>
-
         <div class="movie-list">
             <?php
             foreach ($now_showing as $movie) {
-                echo "
-                <div class='movie-card'>
-                    <img src='{$movie['img']}' alt='Poster of {$movie['title']}' class='movie-img'>
-                    <div class='movie-details'>
-                        <h4>{$movie['title']}</h4>
-                        <p>{$movie['details']}</p>
-                        <form action='seat_selection.php' method='GET'>
-                            <input type='hidden' name='title' value='{$movie['title']}'>
-                            <input type='hidden' name='details' value='{$movie['details']}'>
-                            <input type='hidden' name='description' value='{$movie['description']}'>
-                            <button type='submit' class='btn-book'>Book Tickets</button>
+                ?>
+                <div class="movie-card">
+                    <img src="<?php echo $movie['img']; ?>" alt="Poster of <?php echo $movie['title']; ?>" class="movie-img">
+
+                    <div class="movie-details">
+                        <div>
+                            <h4><?php echo $movie['title']; ?></h4>
+                            <p><?php echo $movie['details']; ?></p>
+                        </div>
+                        <form action="seat_selection.php" method="GET">
+                            <input type="hidden" name="title" value="<?php echo $movie['title']; ?>">
+                            <input type="hidden" name="details" value="<?php echo $movie['details']; ?>">
+                            <input type="hidden" name="description" value="<?php echo $movie['description']; ?>">
+                            <button type="submit" class="btn-book">Book Tickets</button>
                         </form>
                     </div>
                 </div>
-                ";
+                <?php
             }
             ?>
         </div>
     </div>
 </section>
-
-<script src="scripts.js"></script>
-</body>
-</html>

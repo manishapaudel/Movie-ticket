@@ -100,7 +100,7 @@
       cursor: pointer;
       font-size: 16px;
       transition: background 0.3s ease;
-      margin:10px;
+      margin: 10px;
     }
     .booking-summary button:hover {
       background: #16a34a;
@@ -141,7 +141,42 @@
   <h1>Seat Booking System</h1>
 
   <div class="seat-container" id="seatContainer">
-    <!-- Seats will be dynamically loaded here -->
+    <?php
+    include 'config.php'; // Ensure this file initializes a PDO connection in the variable $conn
+
+    try {
+        // Fetch seat data from the database
+        $sql = "SELECT * FROM seats";
+        $stmt = $conn->prepare($sql); // Use PDO's prepare statement
+        $stmt->execute();
+    
+        // Fetch all rows as an associative array
+        $seatsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        if (!$seatsData) {
+            echo "No seats data found.";
+        }
+    } catch (PDOException $e) {
+        echo "Error fetching seat data: " . $e->getMessage();
+    }
+    
+    $rows = ['A', 'B'];
+    foreach ($rows as $row) {
+        echo '<div class="seats-row">';
+        foreach ($seatsData as $seat) {
+            if (strpos($seat['number'], $row) === 0) {
+                $class = $seat['status'] === 'available' ? 'available' : 'occupied';
+                if ($seat['is_selected']) {
+                  $class .= ' selected'; // Highlight selected seats
+              }
+                echo "<div class='seat $class' data-id='{$seat['id']}' data-price='{$seat['price']}'>
+                        {$seat['number']}
+                      </div>";
+            }
+        }
+        echo '</div>';
+    }
+    ?>
   </div>
 
   <div class="booking-summary">
@@ -167,12 +202,24 @@
     let selectedSeats = [];
     let totalPrice = 0;
 
+<<<<<<< Updated upstream
     // Fetch seat data from seat_selection.php
     fetch('seat_selection.php')
       .then(response => response.json())
       .then(seatsData => {
         if (seatsData.length === 0) {
           alert("No seats data found.");
+=======
+    document.querySelectorAll('.seat.available').forEach(seat => {
+      seat.addEventListener('click', () => {  
+        const seatId = parseInt(seat.dataset.id);
+        const price = parseInt(seat.dataset.price);
+
+        seat.classList.toggle('selected');
+        if (seat.classList.contains('selected')) {
+          selectedSeats.push(seatId);
+          totalPrice += price;
+>>>>>>> Stashed changes
         } else {
           // Dynamically create seat rows
           const seatContainer = document.getElementById("seatContainer");

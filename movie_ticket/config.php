@@ -5,6 +5,7 @@ $host = "localhost";
 $dbname = "mydb";
 $username = "root";
 $password = "";
+$dbname = "cinemas";
 
 try {
     // Creating a PDO instance for database connection

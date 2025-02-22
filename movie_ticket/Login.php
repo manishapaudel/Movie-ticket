@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -42,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -108,14 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1rem;
-
             border: 1px solid #ccc;
             border-radius: 4px;
-        
+            box-sizing: border-box;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
-
         }
 
         input:focus {
@@ -161,25 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .link:hover {
             text-decoration: underline;
-        }
-
-        .password-container {
-            position: relative;
-            margin-bottom: 1rem;
-        }
-
-        .password-container input {
-            padding-right: 2.5rem;
-        }
-
-        .toggle-password {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 1rem;
-            color: #2575fc;
         }
 
         .error {
@@ -234,7 +211,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h1>Login</h1>
-
         <?php if (isset($successMessage)): ?>
             <div class="success"> <?= htmlspecialchars($successMessage) ?> </div>
             <a href="index.php" class="btn">Go to Dashboard</a>
