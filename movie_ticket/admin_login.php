@@ -7,21 +7,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Query the database to check credentials
+    // Prepare the statement correctly for MySQLi
     $stmt = $conn->prepare("SELECT * FROM admins WHERE email = ?");
-    $stmt->execute([$email]);
-    $admin = $stmt->fetch();
+    $stmt->bind_param("s", $email); // "s" means string
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $admin = $result->fetch_assoc();
 
-    if (password_verify($password, $admin["password"])) {
+    if ($admin && password_verify($password, $admin["password"])) {
         // Set session and redirect to admin dashboard
-        $_SESSION['admin_id'] = $admin['id'];
+        $_SESSION['id'] = $admin['id'];
         header("Location: admin_dashboard.php");
         exit;
     } else {
-        $error = 'Password does not match.';
+        $error = 'Invalid email or password.';
     }
 }
-?>  <!-- This was missing -->
+?>
+  <!-- This was missing -->
 
 
 

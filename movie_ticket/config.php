@@ -1,20 +1,17 @@
 <?php
 // config.php
 
-$host = "localhost";
-$dbname = "mydb";
-$username = "root";
-$password = "";
-$dbname = "cinemas";
+$servername = "localhost";
+$username = "root"; // default username for MySQL
+$password = ""; // default password for MySQL
+$dbname = "mydb"; // your database name
 
-try {
-    // Creating a PDO instance for database connection
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    // Set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    // Handle any connection error
-    echo "Connection failed: " . $e->getMessage();
-}
 
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+ 
 ?>

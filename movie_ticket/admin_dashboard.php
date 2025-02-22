@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['id'])) {
     header("Location: admin_login.php");
     exit;
 }
@@ -9,20 +9,44 @@ include 'config.php';
 
 // Fetch admin details
 $stmt = $conn->prepare("SELECT * FROM admins WHERE id = ?");
-$stmt->execute([$_SESSION['admin_id']]);
-$admin = $stmt->fetch();
+$stmt->bind_param("i", $_SESSION['id']);
+$stmt->execute();
+$result = $stmt->get_result();
+$admin = $result->fetch_assoc();
 
-// Fetch movies, users, and bookings for the dashboard
-$moviesStmt = $conn->query("SELECT * FROM movies");
-$movies = $moviesStmt->fetchAll();
-$usersStmt = $conn->query("SELECT * FROM users");
-$users = $usersStmt->fetchAll();
+// Initialize arrays
+$movies = [];
+$users = [];
+$bookings = [];
 
-$bookingsStmt = $conn->query("SELECT b.id, u.email as user_email, m.title as movie_title, b.seats, b.booking_date 
-                              FROM bookings b 
-                              JOIN users u ON b.user_id = u.id 
-                              JOIN movies m ON b.movie_id = m.id");
-$bookings = $bookingsStmt->fetchAll();
+// Fetch movies
+$moviesStmt = $conn->prepare("SELECT * FROM movies");
+$moviesStmt->execute();
+$resultMovies = $moviesStmt->get_result();
+while ($row = $resultMovies->fetch_assoc()) {
+    $movies[] = $row;
+}
+
+// Fetch users
+$usersStmt = $conn->prepare("SELECT * FROM users");
+$usersStmt->execute();
+$resultUsers = $usersStmt->get_result();
+while ($row = $resultUsers->fetch_assoc()) {
+    $users[] = $row;
+}
+
+// Fetch bookings with user and movie details
+$bookingsStmt = $conn->prepare("
+    SELECT b.id, u.email as user_email, m.title as movie_title, b.seats, b.booking_date 
+    FROM bookings b 
+    JOIN users u ON b.user_id = u.id 
+    JOIN movies m ON b.movie_id = m.id
+");
+$bookingsStmt->execute();
+$resultBookings = $bookingsStmt->get_result();
+while ($row = $resultBookings->fetch_assoc()) {
+    $bookings[] = $row;
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,12 +57,10 @@ $bookings = $bookingsStmt->fetchAll();
     <title>Advanced Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- DataTables -->
-    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 </head>
 <body>
     <!-- Navbar -->
@@ -97,9 +119,8 @@ $bookings = $bookingsStmt->fetchAll();
         <div class="tab-content mt-4">
             <!-- Movies Tab -->
             <div class="tab-pane fade show active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
-                <!-- Add Movie Link -->
-<a href="add_movie.php" class="btn btn-primary mb-3">Add Movie</a>
-
+                <a href="add_movie.php" class="btn btn-primary mb-3">Add Movie</a>
+                
                 <table id="moviesTable" class="table table-bordered table-striped">
                     <thead class="table-dark">
                         <tr>
@@ -119,9 +140,8 @@ $bookings = $bookingsStmt->fetchAll();
                             <td><?php echo htmlspecialchars($movie['title']); ?></td>
                             <td><?php echo htmlspecialchars($movie['genre']); ?></td>
                             <td><?php echo htmlspecialchars($movie['duration']); ?> mins</td>
-
                             <td><?php echo htmlspecialchars($movie['description']); ?></td>
-                            <td><img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster" width="50"></td>
+                            <td><img src="/uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster" width="50"></td>
                             <td>
                                 <a href="edit_movie.php?id=<?php echo $movie['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="delete_movie.php?id=<?php echo $movie['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
@@ -132,64 +152,62 @@ $bookings = $bookingsStmt->fetchAll();
                 </table>
             </div>
 
-           <!-- Users Tab -->
-<div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
-    <table id="usersTable" class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Created At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($users as $user): ?>
-            <tr>
-                <td><?php echo $user['id']; ?></td>
-                <td><?php echo htmlspecialchars($user['email']); ?></td>
-                <td><?php echo htmlspecialchars($user['password']); ?></td>
-                <td><?php echo htmlspecialchars($user['created_at']); ?></td>
-                <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $user['id']; ?>">Edit</button>
-                    <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
-                </td>
-            </tr>
-
-            <!-- Edit User Modal -->
-            <div class="modal fade" id="editUserModal<?php echo $user['id']; ?>" tabindex="-1" aria-labelledby="editUserModalLabel<?php echo $user['id']; ?>" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editUserModalLabel<?php echo $user['id']; ?>">Edit User</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Users Tab -->
+            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <table id="usersTable" class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><?php echo $user['id']; ?></td>
+                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                            <td><?php echo htmlspecialchars($user['password']); ?></td>
+                            <td><?php echo htmlspecialchars($user['created_at']); ?></td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $user['id']; ?>">Edit</button>
+                                <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                            </td>
+                        </tr>
+                        <!-- Edit User Modal -->
+                        <div class="modal fade" id="editUserModal<?php echo $user['id']; ?>" tabindex="-1" aria-labelledby="editUserModalLabel<?php echo $user['id']; ?>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editUserModalLabel<?php echo $user['id']; ?>">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="edit_user.php" method="POST">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                            <div class="mb-3">
+                                                <label for="userEmail<?php echo $user['id']; ?>" class="form-label">Email</label>
+                                                <input type="email" name="email" id="userEmail<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="userPassword<?php echo $user['id']; ?>" class="form-label">Password</label>
+                                                <input type="text" name="password" id="userPassword<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['password']); ?>" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <form action="edit_user.php" method="POST">
-                            <div class="modal-body">
-                                <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                <div class="mb-3">
-                                    <label for="userEmail<?php echo $user['id']; ?>" class="form-label">Email</label>
-                                    <input type="email" name="email" id="userEmail<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="userPassword<?php echo $user['id']; ?>" class="form-label">Password</label>
-                                    <input type="text" name="password" id="userPassword<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['password']); ?>" required>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
-
 
             <!-- Bookings Tab -->
             <div class="tab-pane fade" id="bookings" role="tabpanel" aria-labelledby="bookings-tab">
@@ -220,12 +238,15 @@ $bookings = $bookingsStmt->fetchAll();
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        $(document).ready(function () {
             // Initialize DataTables
-            ['moviesTable', 'usersTable', 'bookingsTable'].forEach(id => {
-                new DataTable(`#${id}`);
-            });
+            $('#moviesTable').DataTable();
+            $('#usersTable').DataTable();
+            $('#bookingsTable').DataTable();
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
