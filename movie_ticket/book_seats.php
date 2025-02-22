@@ -151,8 +151,8 @@ while ($row = $resultBookings->fetch_assoc()) {
                             <td><img src="<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster" width="50"></td>
 
                             <td>
-                                <a href="edit_movie.php?id=<?php echo $movie['movie_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="delete_movie.php?id=<?php echo $movie['movie_id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="edit_movie.php?id=<?php echo $movie['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="delete_movie.php?id=<?php echo $movie['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

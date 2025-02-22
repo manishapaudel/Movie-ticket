@@ -5,7 +5,7 @@ include 'config.php'; // Replace with your DB config file
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the file was uploaded without errors
     if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'Img/'; // Directory where the image will be saved
+        $uploadDir = 'uploads/'; // Directory where the image will be saved
         $fileName = basename($_FILES['poster']['name']); // Original file name
         $uploadFile = $uploadDir . $fileName;
 

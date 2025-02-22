@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(pink, pink, blue, blue);
+            background: white;
             background-size: 400% 400%;
             animation: gradientBG 10s ease infinite;
             display: flex;
@@ -55,10 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .login-container {
-            background: #252525;
+            /* background: #252525; */
+            color: #6a0dad; 
             padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
             width: 100%;
             max-width: 400px;
             display: flex;
@@ -79,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         h1 {
             font-size: 2rem;
-            color: #fff;
+            color:  #6a0dad;;
             margin-bottom: 1rem;
             text-align: center;
         }
@@ -117,16 +118,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         input[type="email"]:focus,
         input[type="password"]:focus {
-            border-color: #2575fc;
+            border-color: #6a0dad;;
             outline: none;
-            box-shadow: 0 0 8px rgba(37, 117, 252, 0.8);
+            /* box-shadow: 0 0 8px rgba(37, 117, 252, 0.8); */
             transform: scale(1.03);
         }
 
         button {
             width: 100%;
             padding: 0.8rem;
-            background-color: #2575fc;
+            background-color: #6a0dad; 
             border: none;
             border-radius: 4px;
             color: #fff;
@@ -137,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         button:hover {
-            background-color: #1a5bbf;
+            background-color: #6a0dad;
             transform: scale(1.05);
         }
 

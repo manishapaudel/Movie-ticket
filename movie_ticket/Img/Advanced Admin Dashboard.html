@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)http://localhost/6%20sem%20project/movie_ticket/admin_dashboard.php -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="./Advanced Admin Dashboard_files/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="./Advanced Admin Dashboard_files/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="./Advanced Admin Dashboard_files/chart.js.download"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="http://localhost/6%20sem%20project/movie_ticket/admin_dashboard.php#">Admin Dashboard</a>
+            <button class="btn btn-danger" onclick="window.location.href=&#39;logout.php&#39;">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Welcome, admin@example.com!</h1>
+
+        <!-- Statistics Section -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-center bg-primary text-white">
+                    <div class="card-body">
+                        <h2>1</h2>
+                        <p>Movies</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center bg-success text-white">
+                    <div class="card-body">
+                        <h2>5</h2>
+                        <p>Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center bg-danger text-white">
+                    <div class="card-body">
+                        <h2>0</h2>
+                        <p>Bookings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs for Movies, Users, and Bookings -->
+        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies" type="button" role="tab" aria-controls="movies" aria-selected="true">Movies</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false" tabindex="-1">Users</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button" role="tab" aria-controls="bookings" aria-selected="false" tabindex="-1">Bookings</button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4">
+            <!-- Movies Tab -->
+            <div class="tab-pane fade show active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
+                <a href="http://localhost/6%20sem%20project/movie_ticket/add_movie.php" class="btn btn-primary mb-3">Add Movie</a>
+                
+                <div id="moviesTable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="moviesTable_length"><label>Show <select name="moviesTable_length" aria-controls="moviesTable" class="form-select form-select-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="moviesTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="moviesTable"></label></div></div></div><div class="row dt-row"><div class="col-sm-12"><table id="moviesTable" class="table table-bordered table-striped dataTable no-footer" aria-describedby="moviesTable_info">
+                    <thead class="table-dark">
+                        <tr><th class="sorting sorting_asc" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID: activate to sort column descending" style="width: 57.2344px;">ID</th><th class="sorting" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-label="Title: activate to sort column ascending" style="width: 84.9141px;">Title</th><th class="sorting" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-label="Genre: activate to sort column ascending" style="width: 104.695px;">Genre</th><th class="sorting" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-label="Duration: activate to sort column ascending" style="width: 143.18px;">Duration</th><th class="sorting" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="width: 366.562px;">Description</th><th class="sorting" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-label="Poster: activate to sort column ascending" style="width: 109.406px;">Poster</th><th class="sorting" tabindex="0" aria-controls="moviesTable" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 180.117px;">Actions</th></tr>
+                    </thead>
+                    <tbody>
+                                                
+                                            <tr class="odd">
+                            <td class="sorting_1">1</td>
+                            <td>hehde</td>
+                            <td>Comedy</td>
+                            <td>673 mins</td>
+                            <td>&lt;p&gt;jhfjefjkwhfiuwhfjkwh&lt;/p&gt;</td>
+                            <td><img src="./Advanced Admin Dashboard_files/67b5acb2cb672.jpg" alt="Poster" width="50"></td>
+
+                            <td>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/edit_movie.php?id=1" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/delete_movie.php?id=1" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr></tbody>
+                </table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="moviesTable_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="moviesTable_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="moviesTable_previous"><a aria-controls="moviesTable" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="http://localhost/6%20sem%20project/movie_ticket/admin_dashboard.php#" aria-controls="moviesTable" role="link" aria-current="page" data-dt-idx="0" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item next disabled" id="moviesTable_next"><a aria-controls="moviesTable" aria-disabled="true" role="link" data-dt-idx="next" tabindex="-1" class="page-link">Next</a></li></ul></div></div></div></div>
+            </div>
+
+            <!-- Users Tab -->
+            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <div class="modal fade" id="editUserModal1" tabindex="-1" aria-labelledby="editUserModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editUserModalLabel1">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="http://localhost/6%20sem%20project/movie_ticket/edit_user.php" method="POST"></form>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="user_id" value="1">
+                                            <div class="mb-3">
+                                                <label for="userEmail1" class="form-label">Email</label>
+                                                <input type="email" name="email" id="userEmail1" class="form-control" value="glekhak@email.com" required="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="userPassword1" class="form-label">Password</label>
+                                                <input type="text" name="password" id="userPassword1" class="form-control" value="$2y$10$5jCKkQj4u6DvRsd5px8SD.H3UF9aMZNgqU3GxkpYyVvaq2uMDhexe" required="">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div><div class="modal fade" id="editUserModal2" tabindex="-1" aria-labelledby="editUserModalLabel2" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editUserModalLabel2">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="http://localhost/6%20sem%20project/movie_ticket/edit_user.php" method="POST"></form>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="user_id" value="2">
+                                            <div class="mb-3">
+                                                <label for="userEmail2" class="form-label">Email</label>
+                                                <input type="email" name="email" id="userEmail2" class="form-control" value="hello@gmail.com" required="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="userPassword2" class="form-label">Password</label>
+                                                <input type="text" name="password" id="userPassword2" class="form-control" value="$2y$10$.C1Y4QLLH4dgLKEHdlnHx.889Piro7EYS/vo7D3D9GxmVjLruy2p." required="">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div><div class="modal fade" id="editUserModal3" tabindex="-1" aria-labelledby="editUserModalLabel3" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editUserModalLabel3">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="http://localhost/6%20sem%20project/movie_ticket/edit_user.php" method="POST"></form>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="user_id" value="3">
+                                            <div class="mb-3">
+                                                <label for="userEmail3" class="form-label">Email</label>
+                                                <input type="email" name="email" id="userEmail3" class="form-control" value="hi@gmail.com" required="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="userPassword3" class="form-label">Password</label>
+                                                <input type="text" name="password" id="userPassword3" class="form-control" value="$2y$10$pAyhEGd9Kt2C0VDknd.Ga.JmcNrBpRpmAaX48U4L0KPIzkrU4NMy2" required="">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div><div class="modal fade" id="editUserModal4" tabindex="-1" aria-labelledby="editUserModalLabel4" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editUserModalLabel4">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="http://localhost/6%20sem%20project/movie_ticket/edit_user.php" method="POST"></form>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="user_id" value="4">
+                                            <div class="mb-3">
+                                                <label for="userEmail4" class="form-label">Email</label>
+                                                <input type="email" name="email" id="userEmail4" class="form-control" value="hi1@gmail.com" required="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="userPassword4" class="form-label">Password</label>
+                                                <input type="text" name="password" id="userPassword4" class="form-control" value="$2y$10$jEl1fuzL6rgk6NCu2NXwlOv/qqjaabZ7yG7gJO3cAZ.z/q84wE3fK" required="">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div><div class="modal fade" id="editUserModal5" tabindex="-1" aria-labelledby="editUserModalLabel5" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editUserModalLabel5">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="http://localhost/6%20sem%20project/movie_ticket/edit_user.php" method="POST"></form>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="user_id" value="5">
+                                            <div class="mb-3">
+                                                <label for="userEmail5" class="form-label">Email</label>
+                                                <input type="email" name="email" id="userEmail5" class="form-control" value="hi2@gmail.com" required="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="userPassword5" class="form-label">Password</label>
+                                                <input type="text" name="password" id="userPassword5" class="form-control" value="$2y$10$uGUQwnoNxv/x/TJhP4gRWu81xcnXr3rY7fhta92BnW0HCFELvld.S" required="">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div><div id="usersTable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="usersTable_length"><label>Show <select name="usersTable_length" aria-controls="usersTable" class="form-select form-select-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="usersTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="usersTable"></label></div></div></div><div class="row dt-row"><div class="col-sm-12"><table id="usersTable" class="table table-bordered table-striped dataTable no-footer" aria-describedby="usersTable_info">
+                    <thead class="table-dark">
+                        <tr><th class="sorting sorting_asc" tabindex="0" aria-controls="usersTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID: activate to sort column descending" style="width: 0px;">ID</th><th class="sorting" tabindex="0" aria-controls="usersTable" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 0px;">Email</th><th class="sorting" tabindex="0" aria-controls="usersTable" rowspan="1" colspan="1" aria-label="Password: activate to sort column ascending" style="width: 0px;">Password</th><th class="sorting" tabindex="0" aria-controls="usersTable" rowspan="1" colspan="1" aria-label="Created At: activate to sort column ascending" style="width: 0px;">Created At</th><th class="sorting" tabindex="0" aria-controls="usersTable" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 0px;">Actions</th></tr>
+                    </thead>
+                    <tbody>
+                                                
+                        <!-- Edit User Modal -->
+                        
+                                                
+                        <!-- Edit User Modal -->
+                        
+                                                
+                        <!-- Edit User Modal -->
+                        
+                                                
+                        <!-- Edit User Modal -->
+                        
+                                                
+                        <!-- Edit User Modal -->
+                        
+                                            <tr class="odd">
+                            <td class="sorting_1">1</td>
+                            <td>glekhak@email.com</td>
+                            <td>$2y$10$5jCKkQj4u6DvRsd5px8SD.H3UF9aMZNgqU3GxkpYyVvaq2uMDhexe</td>
+                            <td>2024-12-07 15:48:35</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal1">Edit</button>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/delete_user.php?id=1" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Are you sure you want to delete this user?&#39;)">Delete</a>
+                            </td>
+                        </tr><tr class="even">
+                            <td class="sorting_1">2</td>
+                            <td>hello@gmail.com</td>
+                            <td>$2y$10$.C1Y4QLLH4dgLKEHdlnHx.889Piro7EYS/vo7D3D9GxmVjLruy2p.</td>
+                            <td>2024-12-12 16:32:01</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal2">Edit</button>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/delete_user.php?id=2" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Are you sure you want to delete this user?&#39;)">Delete</a>
+                            </td>
+                        </tr><tr class="odd">
+                            <td class="sorting_1">3</td>
+                            <td>hi@gmail.com</td>
+                            <td>$2y$10$pAyhEGd9Kt2C0VDknd.Ga.JmcNrBpRpmAaX48U4L0KPIzkrU4NMy2</td>
+                            <td>2024-12-12 18:59:15</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal3">Edit</button>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/delete_user.php?id=3" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Are you sure you want to delete this user?&#39;)">Delete</a>
+                            </td>
+                        </tr><tr class="even">
+                            <td class="sorting_1">4</td>
+                            <td>hi1@gmail.com</td>
+                            <td>$2y$10$jEl1fuzL6rgk6NCu2NXwlOv/qqjaabZ7yG7gJO3cAZ.z/q84wE3fK</td>
+                            <td>2024-12-12 19:00:52</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal4">Edit</button>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/delete_user.php?id=4" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Are you sure you want to delete this user?&#39;)">Delete</a>
+                            </td>
+                        </tr><tr class="odd">
+                            <td class="sorting_1">5</td>
+                            <td>hi2@gmail.com</td>
+                            <td>$2y$10$uGUQwnoNxv/x/TJhP4gRWu81xcnXr3rY7fhta92BnW0HCFELvld.S</td>
+                            <td>2024-12-31 15:33:48</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal5">Edit</button>
+                                <a href="http://localhost/6%20sem%20project/movie_ticket/delete_user.php?id=5" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Are you sure you want to delete this user?&#39;)">Delete</a>
+                            </td>
+                        </tr></tbody>
+                </table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="usersTable_info" role="status" aria-live="polite">Showing 1 to 5 of 5 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="usersTable_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="usersTable_previous"><a aria-controls="usersTable" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="http://localhost/6%20sem%20project/movie_ticket/admin_dashboard.php#" aria-controls="usersTable" role="link" aria-current="page" data-dt-idx="0" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item next disabled" id="usersTable_next"><a aria-controls="usersTable" aria-disabled="true" role="link" data-dt-idx="next" tabindex="-1" class="page-link">Next</a></li></ul></div></div></div></div>
+            </div>
+
+            <!-- Bookings Tab -->
+            <div class="tab-pane fade" id="bookings" role="tabpanel" aria-labelledby="bookings-tab">
+                <div id="bookingsTable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="bookingsTable_length"><label>Show <select name="bookingsTable_length" aria-controls="bookingsTable" class="form-select form-select-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="bookingsTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="bookingsTable"></label></div></div></div><div class="row dt-row"><div class="col-sm-12"><table id="bookingsTable" class="table table-bordered table-striped dataTable no-footer" aria-describedby="bookingsTable_info">
+                    <thead class="table-dark">
+                        <tr><th class="sorting sorting_asc" tabindex="0" aria-controls="bookingsTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID: activate to sort column descending" style="width: 0px;">ID</th><th class="sorting" tabindex="0" aria-controls="bookingsTable" rowspan="1" colspan="1" aria-label="User: activate to sort column ascending" style="width: 0px;">User</th><th class="sorting" tabindex="0" aria-controls="bookingsTable" rowspan="1" colspan="1" aria-label="Movie: activate to sort column ascending" style="width: 0px;">Movie</th><th class="sorting" tabindex="0" aria-controls="bookingsTable" rowspan="1" colspan="1" aria-label="Seats: activate to sort column ascending" style="width: 0px;">Seats</th><th class="sorting" tabindex="0" aria-controls="bookingsTable" rowspan="1" colspan="1" aria-label="Booking Date: activate to sort column ascending" style="width: 0px;">Booking Date</th></tr>
+                    </thead>
+                    <tbody>
+                                            <tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">No data available in table</td></tr></tbody>
+                </table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="bookingsTable_info" role="status" aria-live="polite">Showing 0 to 0 of 0 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="bookingsTable_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="bookingsTable_previous"><a aria-controls="bookingsTable" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">Previous</a></li><li class="paginate_button page-item next disabled" id="bookingsTable_next"><a aria-controls="bookingsTable" aria-disabled="true" role="link" data-dt-idx="next" tabindex="-1" class="page-link">Next</a></li></ul></div></div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./Advanced Admin Dashboard_files/jquery.min.js.download"></script>
+    <script src="./Advanced Admin Dashboard_files/jquery.dataTables.min.js.download"></script>
+    <script src="./Advanced Admin Dashboard_files/dataTables.bootstrap5.min.js.download"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTables
+            $('#moviesTable').DataTable();
+            $('#usersTable').DataTable();
+            $('#bookingsTable').DataTable();
+        });
+    </script>
+    <script src="./Advanced Admin Dashboard_files/bootstrap.bundle.min.js.download"></script>
+
+
+</body></html>

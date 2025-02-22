@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         die("Invalid movie ID.");
     }
 
-    $stmt = $conn->prepare("SELECT * FROM movies WHERE id = ?");
-    $stmt->bind_param("i", $id); // "i" means integer
+    $stmt = $conn->prepare("SELECT * FROM movies WHERE movie_id = ?");
+    $stmt->bind_param("i", $id); // Use $id instead of $movie_id
     $stmt->execute();
     $result = $stmt->get_result();
     $movie = $result->fetch_assoc();
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 // Update movie details
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'];
+    $id = $_POST['movie_id'];
     $title = $_POST['title'];
     $genre = $_POST['genre'];
     $duration = $_POST['duration'];
@@ -29,17 +29,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle poster upload
     $poster = $movie['poster']; // Default to existing poster
-    if (isset($_FILES['poster']) && $_FILES['poster']['error'] == UPLOAD_ERR_OK) {
+    if (!empty($_FILES['poster']['name'])) {
         $targetDir = "uploads/";
         $fileName = uniqid() . basename($_FILES['poster']['name']);
         $targetFilePath = $targetDir . $fileName;
 
         if (move_uploaded_file($_FILES['poster']['tmp_name'], $targetFilePath)) {
-            $poster = $fileName;
+            $poster = $targetFilePath; // Ensure correct path is saved
         }
     }
 
-    $stmt = $conn->prepare("UPDATE movies SET title = ?, genre = ?, duration = ?, description = ?, poster = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE movies SET title = ?, genre = ?, duration = ?, description = ?, poster = ? WHERE movie_id = ?");
     $stmt->bind_param("ssissi", $title, $genre, $duration, $description, $poster, $id);
 
     if ($stmt->execute()) {
@@ -142,48 +142,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Edit Movie</h2>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?php echo htmlspecialchars($movie['id']); ?>">
+    <h2>Edit Movie</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="movie_id" value="<?php echo htmlspecialchars($movie['movie_id']); ?>">
 
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" name="title" value="<?php echo htmlspecialchars($movie['title']); ?>" required>
-            </div>
+        <label>Title:</label>
+        <input type="text" name="title" value="<?php echo htmlspecialchars($movie['title']); ?>" required><br>
 
-            <div class="form-group">
-                <label>Genre</label>
-                <select name="genre" required>
-                    <option value="Action" <?php echo $movie['genre'] == 'Action' ? 'selected' : ''; ?>>Action</option>
-                    <option value="Comedy" <?php echo $movie['genre'] == 'Comedy' ? 'selected' : ''; ?>>Comedy</option>
-                    <option value="Drama" <?php echo $movie['genre'] == 'Drama' ? 'selected' : ''; ?>>Drama</option>
-                    <option value="Horror" <?php echo $movie['genre'] == 'Horror' ? 'selected' : ''; ?>>Horror</option>
-                    <option value="Romance" <?php echo $movie['genre'] == 'Romance' ? 'selected' : ''; ?>>Romance</option>
-                </select>
-            </div>
+        <label>Genre:</label>
+        <select name="genre" required>
+            <option value="Action" <?php echo $movie['genre'] == 'Action' ? 'selected' : ''; ?>>Action</option>
+            <option value="Comedy" <?php echo $movie['genre'] == 'Comedy' ? 'selected' : ''; ?>>Comedy</option>
+            <option value="Drama" <?php echo $movie['genre'] == 'Drama' ? 'selected' : ''; ?>>Drama</option>
+            <option value="Horror" <?php echo $movie['genre'] == 'Horror' ? 'selected' : ''; ?>>Horror</option>
+            <option value="Romance" <?php echo $movie['genre'] == 'Romance' ? 'selected' : ''; ?>>Romance</option>
+        </select><br>
 
-            <div class="form-group">
-                <label>Duration (in minutes)</label>
-                <input type="number" name="duration" value="<?php echo htmlspecialchars($movie['duration']); ?>" required>
-            </div>
+        <label>Duration (mins):</label>
+        <input type="number" name="duration" value="<?php echo htmlspecialchars($movie['duration']); ?>" required><br>
 
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="4" required><?php echo htmlspecialchars($movie['description']); ?></textarea>
-            </div>
+        <label>Description:</label>
+        <textarea name="description" rows="4" required><?php echo htmlspecialchars($movie['description']); ?></textarea><br>
 
-            <div class="form-group">
-                <label>Poster</label>
-                <input type="file" name="poster">
-                <?php if (!empty($movie['poster'])): ?>
-                    <img src="uploads/<?php echo htmlspecialchars($movie['poster']); ?>" alt="Poster">
-                <?php endif; ?>
-            </div>
+        <label>Poster:</label>
+        <input type="file" name="poster">
+        <?php if (!empty($movie['poster'])): ?>
+            <img src="<?php echo htmlspecialchars($movie['poster']); ?>" width="100">
+        <?php endif; ?><br>
 
-            <button type="submit">Save Changes</button>
-        </form>
-        <a href="admin_dashboard.php">Back to Dashboard</a>
-    </div>
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="admin_dashboard.php">Back to Dashboard</a>
 </body>
-</html>
+</html
